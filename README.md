@@ -1,5 +1,10 @@
 # Tweb_Unito_2025-2026
 
+## Divisione lavoro e dettagli
+
+V-reid -> news
+soulvieg -> forum
+
 
 ## Progetto Esteso
 Con il progetto esteso si ottiene un minimo di 18 punti (progetto sufficiente) e un massimo di 32 punti (progetto eccellente).
