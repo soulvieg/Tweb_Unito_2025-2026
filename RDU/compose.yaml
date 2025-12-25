@@ -1,1 +1,11 @@
-services: { }
+services:
+  postgres:
+    image: 'postgres:16-alpine' # Using a lightweight alpine version
+    environment:
+      - 'POSTGRES_DB=rdu_db'
+      - 'POSTGRES_PASSWORD=revolution'
+      - 'POSTGRES_USER=root'
+    ports:
+      - '5432:5432'
+    labels:
+      - "org.springframework.boot.service-connection=postgres"
