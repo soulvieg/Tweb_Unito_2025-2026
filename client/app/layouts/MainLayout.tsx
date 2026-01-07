@@ -1,13 +1,19 @@
 import React from "react";
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 import Footer from "~/components/Footer";
 import Header from "~/components/Header";
 
 export default function MainLayout() {
+	const location = useLocation();
 	return (
 		<>
 			<Header />
-			<Outlet />
+			<main
+				className="animate-fade-in bg-black text-foreground antialiased selection:bg-primary/10 font-body"
+				key={"main_layout_" + location.pathname}
+			>
+				<Outlet />
+			</main>
 			<Footer />
 		</>
 	);
