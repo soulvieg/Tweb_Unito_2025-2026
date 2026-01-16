@@ -10,7 +10,7 @@ public class Post {
     private Integer postId;
 
     @ManyToOne
-    @JoinColumn(name = "u_id", nullable = false)
+    //@JoinColumn(name = "u_id", nullable = false)
     private User author;
 
     @Column(nullable = false)

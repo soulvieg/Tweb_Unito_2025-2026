@@ -10,11 +10,11 @@ public class Comment {
     private Integer commentId;
 
     @ManyToOne
-    @JoinColumn(name = "p_id", nullable = false)
+   // @JoinColumn(name = "p_id", nullable = false)
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name = "u_id", nullable = true)
+    //@JoinColumn(name = "u_id", nullable = true)
     private User author;
 
     @Column(columnDefinition = "TEXT", nullable = false)
