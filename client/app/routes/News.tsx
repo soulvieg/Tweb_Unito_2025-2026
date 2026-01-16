@@ -1,4 +1,6 @@
+import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, Search } from "lucide-react";
+import axios from "axios";
 import { useState } from "react";
 import { NewsCard } from "~/components/NewsCard";
 import Button from "~/components/ui/Button";
@@ -6,21 +8,22 @@ import Skeleton from "~/components/ui/Skeleton";
 import useDebounce from "~/hooks/useDebounce";
 import useFilter from "~/hooks/useFilter";
 import usePagination from "~/hooks/usePagination";
-import { palestinianNews } from "~/lib/constants";
+import { queries } from "~/lib/api";
+import NavigationButton from "~/components/NavigationButton";
 
 export default function News() {
+	const { data: news, isLoading } = useQuery(queries.news.getAll);
+
 	const { filteredItems, filter, onFilterChange, debouncedValue } = useFilter(
 		{
 			keysToSearch: ["title", "description"],
-			items: palestinianNews,
+			items: news,
 		}
 	);
 	const { paginatedItems, next, prev, canPrev, canNext } = usePagination({
 		itemsPerPage: 6,
 		items: filteredItems,
 	});
-
-	const isLoading = false;
 
 	return (
 		<div className="relative bg-primary-foreground">
@@ -59,8 +62,8 @@ export default function News() {
 							</div>
 						))}
 					</div>
-				) : paginatedItems?.length === 0 ? (
-					<div className="text-center py-20 animate-fade-in">
+				) : !paginatedItems || paginatedItems?.length === 0 ? (
+					<div className="text-center py-20 animate-fade-in-up">
 						<h3 className="text-xl font-bold text-muted-foreground">
 							No articles found matching your search.
 						</h3>
@@ -77,22 +80,12 @@ export default function News() {
 					</div>
 				)}
 			</div>
-			<div className="flex gap-2 mx-auto w-fit items-center pb-10">
-				<Button
-					className="bg-transparent text-white border border-gray-300 rounded-full"
-					onClick={prev}
-					disabled={!canPrev}
-				>
-					<ArrowLeft />
-				</Button>
-				<Button
-					className="bg-transparent text-white border border-gray-300 rounded-full"
-					onClick={next}
-					disabled={!canNext}
-				>
-					<ArrowRight />
-				</Button>
-			</div>
+			<NavigationButton
+				prev={prev}
+				next={next}
+				canPrev={canPrev}
+				canNext={canNext}
+			/>
 		</div>
 	);
 }

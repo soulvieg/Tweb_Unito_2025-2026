@@ -7,11 +7,11 @@ export default function useFilter<T extends object>({
 	debouncedDelay = 500,
 }: {
 	keysToSearch: (keyof T)[];
-	items: T[];
+	items: T[] | undefined;
 	debouncedDelay?: number;
 }) {
 	const [searchTerm, setSearchTerm] = useState("");
-	const [filteredItems, setFilteredItems] = useState<T[]>(items);
+	const [filteredItems, setFilteredItems] = useState<T[] | undefined>(items);
 	const debouncedValue = useDebounce({
 		value: searchTerm,
 		delay: debouncedDelay,
@@ -20,7 +20,7 @@ export default function useFilter<T extends object>({
 	useEffect(() => {
 		if (debouncedValue) {
 			setFilteredItems(
-				items.filter((article) => {
+				items?.filter((article) => {
 					const c = keysToSearch
 						.filter((x) => typeof article[x] == "string")
 						.map((x) =>

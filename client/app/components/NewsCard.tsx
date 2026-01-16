@@ -1,8 +1,8 @@
 import { Calendar, MapPin } from "lucide-react";
 import { format } from "date-fns";
-import type { NewsType } from "~/lib/constants";
 import { Link } from "react-router";
 import { it } from "date-fns/locale/it";
+import type { NewsType } from "~/lib/types";
 
 export function NewsCard({
 	article,
@@ -17,17 +17,17 @@ export function NewsCard({
 		<Link to={`/news/${article.id}`} className="group block h-full">
 			<div
 				style={{ animationDelay: `${((index ?? 1) % 3) * 100}ms` }}
-				className={`rounded-xl h-full opacity-0 overflow-hidden animate-fade-in transition-all duration-300 border-2  hover:border-primary hover:shadow-2xl ${featured ? "border-primary bg-primary/10" : "border-muted hover:bg-primary/5"}`}
+				className={`rounded-xl h-full opacity-0 overflow-hidden animate-fade-in-up transition-all duration-300 border-2  hover:border-primary hover:shadow-2xl ${featured ? "border-primary bg-primary/10" : "border-muted hover:bg-primary/5"}`}
 			>
 				<div className="relative aspect-video overflow-hidden">
 					<img
-						src={article.image}
+						src={article.img}
 						alt={article.title}
 						className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
 					/>
 
 					<div className="absolute top-2 left-2 bg-secondary-foreground/80 backdrop-blur-xl shadow-sm border border-white rounded-full px-2 py-1">
-						{article.source}
+						{article.src}
 					</div>
 				</div>
 
@@ -36,9 +36,13 @@ export function NewsCard({
 						<div className="flex items-center justify-between text-xs text-muted-foreground">
 							<div className="flex items-center">
 								<Calendar className="h-3 w-3 mr-1" />
-								{format(new Date(article.date), "d MMM, yyyy", {
-									locale: it,
-								})}
+								{format(
+									new Date(article.published_at),
+									"d MMM, yyyy",
+									{
+										locale: it,
+									}
+								)}
 							</div>
 							{article.location && (
 								<div className="flex items-center">

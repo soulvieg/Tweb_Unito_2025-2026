@@ -7,9 +7,9 @@ import Skeleton from "~/components/ui/Skeleton";
 import { palestinianNews } from "~/lib/constants";
 
 export default function NewsDetail() {
-	const { id } = useParams();
+	const id = parseInt(useParams().id || "", 10);
 	const isLoading = false;
-	const article = palestinianNews.find((article) => article.id === id);
+	const article = palestinianNews.find((article) => article.id == id);
 	if (isLoading) {
 		return (
 			<div className="min-h-screen">
@@ -62,7 +62,7 @@ export default function NewsDetail() {
 						<div className="flex items-center gap-3 mb-6">
 							{/* badge */}
 							<div className="text-sm py-1 px-3 rounded-full  bg-amber-600">
-								{article.source}
+								{article.src}
 							</div>
 						</div>
 
@@ -74,7 +74,7 @@ export default function NewsDetail() {
 							<div className="flex items-center text-muted-foreground">
 								<Calendar className="w-4 h-4 mr-2" />
 								{format(
-									new Date(article.date),
+									new Date(article.published_at),
 									"d MMMM, yyyy",
 									{ locale: it }
 								)}
@@ -93,7 +93,7 @@ export default function NewsDetail() {
 				<div className="container mx-auto px-4 max-w-5xl -mt-8 mb-12">
 					<div className="aspect-video rounded-3xl overflow-hidden shadow-2xl">
 						<img
-							src={article.image}
+							src={article.img}
 							alt={article.title}
 							className="w-full h-full object-cover"
 						/>
