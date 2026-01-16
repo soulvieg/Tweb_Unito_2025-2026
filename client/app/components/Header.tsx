@@ -17,6 +17,7 @@ const navItems: NavItemType[] = [
 
 export default function Header() {
 	const location = useLocation();
+	console.log(location.pathname.split("/")[1] === "/news");
 	return (
 		<header className="sticky top-0 z-50 w-full border-b-2 border-primary bg-background font-body">
 			<div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -35,7 +36,10 @@ export default function Header() {
 					{navItems.map((item) => (
 						<HeaderLink
 							item={item}
-							isCurrent={location.pathname === item.to}
+							isCurrent={
+								"/" + location.pathname.split("/")[1] ===
+								item.to
+							}
 						/>
 					))}
 					<Button>Subscribe</Button>
