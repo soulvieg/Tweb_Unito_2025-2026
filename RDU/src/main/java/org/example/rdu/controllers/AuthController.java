@@ -33,8 +33,8 @@ public class AuthController{
     public ResponseEntity<UserResponseDTO> signup(@RequestBody SignupRequest request){
         User newUser = new User();
         newUser.setUsername(request.username());
+        if(request.password().length() < 6){return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();}
         newUser.setPassword(passwordEncoder.encode(request.password()));
-        newUser.setUserType(request.userType());
         return new ResponseEntity<>(userMapper.toDto(newUser), HttpStatus.CREATED);
     }
 

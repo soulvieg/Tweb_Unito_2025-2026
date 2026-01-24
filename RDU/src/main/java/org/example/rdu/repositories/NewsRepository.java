@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface NewsRepository extends JpaRepository<News, Integer> {
-    public
-    News findByNewsId(Integer newsId);
+    public News findByNewsId(Integer newsId);
     public void deleteByNewsId(Integer id);
 }

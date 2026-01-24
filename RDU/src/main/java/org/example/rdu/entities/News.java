@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 public class News {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="newsId", nullable = false)
     @Getter
     private Integer newsId;
 

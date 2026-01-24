@@ -4,12 +4,15 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Entity
 @Table(name = "users")
 public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="userId", nullable = false)
     @Getter
     private Integer userId;
 
@@ -28,4 +31,12 @@ public class User{
     @Setter
     @Enumerated(EnumType.STRING)
     private UserType userType;
+
+    @OneToMany(mappedBy = "author")
+    @Getter
+    private List<Post> posts;
+
+    @OneToMany(mappedBy = "author")
+    @Getter
+    private List<Comment> comments;
 }
