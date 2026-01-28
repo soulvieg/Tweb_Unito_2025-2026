@@ -2,13 +2,16 @@ package org.example.rdu.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
 public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,9 +37,11 @@ public class User{
 
     @OneToMany(mappedBy = "author")
     @Getter
-    private List<Post> posts;
+    private List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "author")
     @Getter
     private List<Comment> comments;
+
+
 }

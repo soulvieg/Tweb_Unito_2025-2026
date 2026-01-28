@@ -1,8 +1,6 @@
 package org.example.rdu.dtos;
 
-import org.example.rdu.entities.UserType;
-
-public record SignupRequest(
+public record SessionRequest(
     String username,
     String password
 ) {}

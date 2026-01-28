@@ -19,6 +19,7 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     @Getter
+    @Setter
     private User author;
 
     @Column(nullable = false)
@@ -42,4 +43,6 @@ public class Post {
     @OneToMany(mappedBy="post")
     @Getter
     private List<Comment> comments;
+
+    public Post(){}
 }

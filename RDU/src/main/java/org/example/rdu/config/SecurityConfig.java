@@ -5,22 +5,25 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/public/**").permitAll()      // Everyone allowed
-                        .requestMatchers("/admin/**").hasRole("admin") // Only Admins
-                        .anyRequest().authenticated()                  // Everyone else must login
+                        .requestMatchers("/community/**").permitAll()
+                        .requestMatchers("/information/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("admin")
+                        .anyRequest().authenticated()
                 )
-                .formLogin(Customizer.withDefaults()); // Give me the default login page
+                .formLogin(Customizer.withDefaults());
 
         return http.build();
     }

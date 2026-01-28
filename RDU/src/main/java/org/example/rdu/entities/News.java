@@ -50,4 +50,6 @@ public class News {
     @Setter
     private User author;
 
+    public News(){}
+
 }

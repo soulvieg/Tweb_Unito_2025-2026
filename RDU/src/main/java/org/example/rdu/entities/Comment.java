@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
+
 @Entity
 @Table(name = "comments")
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="commentId", nullable = false)
+    @Column(name="commentId", nullable = false, unique = true)
     @Getter
     @Setter
     private Integer commentId;
@@ -21,7 +23,7 @@ public class Comment {
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name = "userid", nullable = false)
+    @JoinColumn(name = "userId", nullable = false)
     @Getter
     @Setter
     private User author;
@@ -33,5 +35,13 @@ public class Comment {
 
     @Column(nullable = false)
     @Getter
+    @Setter
+    private Timestamp createdAt;
+
+    @Column(nullable = false)
+    @Getter
+    @Setter
     private Boolean muted = false;
+
+    public Comment(){}
 }

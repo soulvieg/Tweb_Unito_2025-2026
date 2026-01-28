@@ -28,7 +28,7 @@ public class CommentController {
         return new ResponseEntity(commentRepository.findAll(), HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("{/id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Comment> getComment(@PathVariable Integer id){
         return new ResponseEntity<>(commentRepository.findByCommentId(id), HttpStatus.OK);
     }
