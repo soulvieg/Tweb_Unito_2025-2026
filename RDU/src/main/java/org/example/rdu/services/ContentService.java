@@ -20,7 +20,7 @@ public class ContentService {
     private NewsRepository newsRepository;
 
     @Transactional
-    public List<News> findAllNews(String category) {return newsRepository.findAll();}
+    public List<News> findAllNews() {return newsRepository.findAll();}
 
     @Transactional
     public News findNewsById(Integer id) {return newsRepository.findByNewsId(id);}

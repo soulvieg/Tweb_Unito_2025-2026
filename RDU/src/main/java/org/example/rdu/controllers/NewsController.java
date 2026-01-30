@@ -21,8 +21,8 @@ class NewsController {
 
 
     @GetMapping
-    public ResponseEntity<List<News>> getAllNews(@RequestParam(required = false) String category) {
-        return ResponseEntity.ok(contentService.findAllNews(category));
+    public ResponseEntity<List<News>> getAllNews() {
+        return ResponseEntity.ok(contentService.findAllNews());
     }
 
     @GetMapping("/{id}")
