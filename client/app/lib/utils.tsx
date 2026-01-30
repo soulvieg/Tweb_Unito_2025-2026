@@ -2,7 +2,7 @@ import type { JSX, PropsWithChildren } from "react";
 import type { UserType } from "./types";
 import type { ErrorFormType } from "~/hooks/useForm";
 import type { AxiosError } from "axios";
-import { useToast, type AddToast } from "~/contexts/ToastContext";
+import {  type AddToast } from "~/contexts/ToastContext";
 
 export function cn(...classes: string[]) {
 	return classes.join(" ");

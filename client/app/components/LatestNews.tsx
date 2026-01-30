@@ -48,7 +48,7 @@ export default function LatestNews() {
 			) : !latest || latest?.length === 0 ? (
 				<div className="text-center py-20 animate-fade-in-up">
 					<h3 className="text-xl font-bold text-muted-foreground">
-						No articles found matching your search.
+						No articles found.
 					</h3>
 				</div>
 			) : (

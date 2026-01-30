@@ -1,15 +1,4 @@
 import axios from "axios";
-import type {
-	CommentType,
-	CreateCommentType,
-	CreateNewsType,
-	CreatePostType,
-	DatabaseType,
-	NewsType,
-	PostType,
-	LoginType,
-	UserType,
-} from "../types";
 import { newsQueries } from "./databases/newsDatabase";
 import { usersQueries } from "./databases/usersDatabase";
 import { reportsQueries } from "./databases/reportsDatabase";

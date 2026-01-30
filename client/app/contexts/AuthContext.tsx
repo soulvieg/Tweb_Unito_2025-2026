@@ -1,15 +1,14 @@
 import React, {
 	createContext,
-	useState,
+
 	useContext,
 	type JSX,
-	use,
+
 } from "react";
 import type { RoleType, LoginType, UserType } from "../lib/types";
 import { useMutation } from "@tanstack/react-query";
 import { queries } from "~/lib/Api/api";
 import useLocaleState from "../hooks/useLocaleState";
-import { useNavigate } from "react-router";
 import { useToast } from "./ToastContext";
 import type { AxiosError } from "axios";
 import { errorCheck } from "~/lib/utils";

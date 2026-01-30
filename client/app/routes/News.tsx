@@ -1,20 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, ArrowRight, Search } from "lucide-react";
-import axios from "axios";
-import { useState } from "react";
+import {  Search } from "lucide-react";
 import { NewsCard } from "~/components/NewsCard";
 import Button from "~/components/ui/Button";
 import Skeleton from "~/components/ui/Skeleton";
-import useDebounce from "~/hooks/useDebounce";
 import useFilterPagination from "~/hooks/useFilterPagination";
 import { queries } from "~/lib/Api/api";
 import NavigationButton from "~/components/NavigationButton";
 import { queryClient } from "~/layouts/MainLayout";
 import { useDialogControl } from "~/components/ui/Dialog";
-import { useToast } from "~/contexts/ToastContext";
 import { useAuth } from "~/contexts/AuthContext";
-import useForm from "~/hooks/useForm";
-import type { CreateNewsType } from "~/lib/types";
 import NewsDialog from "~/components/NewsDialog";
 import { is } from "~/lib/utils";
 
