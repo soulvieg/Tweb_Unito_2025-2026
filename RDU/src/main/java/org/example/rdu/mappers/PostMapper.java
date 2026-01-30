@@ -3,7 +3,9 @@ package org.example.rdu.mappers;
 import org.example.rdu.dtos.PostDTO;
 import org.example.rdu.entities.Post;
 import org.example.rdu.entities.User;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PostMapper {
     public PostDTO toDTO(Post post) {
         if (post == null) {

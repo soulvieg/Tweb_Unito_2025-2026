@@ -2,7 +2,9 @@ package org.example.rdu.mappers;
 
 import org.example.rdu.dtos.ReportDTO;
 import org.example.rdu.entities.Report;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ReportMapper {
     public ReportDTO toDTO(Report report) {
         if (report == null) {

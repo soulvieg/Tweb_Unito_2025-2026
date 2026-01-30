@@ -4,7 +4,9 @@ import org.example.rdu.dtos.CommentDTO;
 import org.example.rdu.entities.Comment;
 import org.example.rdu.entities.Post;
 import org.example.rdu.entities.User;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CommentMapper {
     public CommentDTO toDTO(Comment comment) {
         if (comment == null) {

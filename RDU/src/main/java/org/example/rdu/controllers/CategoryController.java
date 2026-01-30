@@ -1,7 +1,8 @@
 package org.example.rdu.controllers;
 
+import org.example.rdu.dtos.CategoryDTO;
 import org.example.rdu.entities.Category;
-import org.example.rdu.entities.News;
+import org.example.rdu.mappers.CategoryMapper;
 import org.example.rdu.services.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,17 @@ public class CategoryController {
     @Autowired
     private ContentService contentService;
 
+    @Autowired
+    private CategoryMapper categoryMapper;
+
 
     @GetMapping
-    public ResponseEntity<List<Category>> getCategories() {
-        return ResponseEntity.ok(contentService.findAllCategories());
+    public ResponseEntity<List<CategoryDTO>> getCategories() {
+        List<Category> categories = contentService.findAllCategories();
+        List<CategoryDTO> categoryDTOs = categories.stream()
+                .map(categoryMapper::toDTO)
+                .toList();
+        return ResponseEntity.ok(categoryDTOs);
     }
 
 }

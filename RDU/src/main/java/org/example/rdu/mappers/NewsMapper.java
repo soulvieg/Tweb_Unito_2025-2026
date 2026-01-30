@@ -3,7 +3,9 @@ package org.example.rdu.mappers;
 import org.example.rdu.dtos.NewsDTO;
 import org.example.rdu.entities.Category;
 import org.example.rdu.entities.News;
+import org.springframework.stereotype.Component;
 
+@Component
 public class NewsMapper {
     public NewsDTO toDTO(News news) {
         if (news == null) {
