@@ -51,53 +51,59 @@ class DataSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        List<User> users = new ArrayList<>();
-        List<Post> posts = new ArrayList<>();
-        List<News> news = new ArrayList<>();
-        List<Comment> comments = new ArrayList<>();
-        List<Category> categories = new ArrayList<>();
-        List<Report> reports = new ArrayList<>();
-
+        // --- FIX 1: Check if data already exists to prevent crash ---
+        if (userRepository.count() > 0) {
+            System.out.println("Database already seeded. Skipping DataSeeder.");
+            return;
+        }
 
         System.out.println("Starting seeding for the User Table");
+
+        List<User> users = new ArrayList<>();
 
         User user1 = new User();
         user1.setUsername("admin");
         user1.setPassword(passwordEncoder.encode("admin123"));
         user1.setUserType(UserType.admin);
         users.add(user1);
+
         User user2 = new User();
         user2.setUsername("Marco");
         user2.setPassword(passwordEncoder.encode("marco123"));
         user2.setUserType(UserType.admin);
         users.add(user2);
+
         User user3 = new User();
         user3.setUsername("Giulia");
         user3.setPassword(passwordEncoder.encode("giulia123"));
         user3.setUserType(UserType.user);
         users.add(user3);
+
         User user4 = new User();
         user4.setUsername("Michael");
         user4.setPassword(passwordEncoder.encode("michael123"));
         user4.setUserType(UserType.user);
         users.add(user4);
+
         User user5 = new User();
         user5.setUsername("Sofia");
         user5.setPassword(passwordEncoder.encode("sofia123"));
         user5.setUserType(UserType.user);
         users.add(user5);
 
+        // Save users first so they have IDs for relationships
         userRepository.saveAll(users);
 
         System.out.println("Starting seeding for the Post Table");
 
+        List<Post> posts = new ArrayList<>();
 
         Post post1 = new Post();
         post1.setTitle("Analisi del conflitto: le prospettive per un cessate il fuoco e la crisi umanitaria");
         post1.setText("Il dibattito sulla situazione in Medio Oriente si fa sempre più serrato. " +
-                "                      \"In questo post analizziamo l'impatto dei recenti sviluppi sui civili in Cisgiordania e nella Striscia di Gaza, \" +" +
-                "                      \"esaminando il ruolo della diplomazia internazionale nel tentativo di mediare una tregua duratura \" +\n" +
-                "                      \"e garantire l'accesso ai corridoi umanitari.");
+                "In questo post analizziamo l'impatto dei recenti sviluppi sui civili in Cisgiordania e nella Striscia di Gaza, " +
+                "esaminando il ruolo della diplomazia internazionale nel tentativo di mediare una tregua duratura " +
+                "e garantire l'accesso ai corridoi umanitari.");
         post1.setCreationDate(getRandomTimestamp());
         post1.setCount_replies(5);
         post1.setAuthor(user3);
@@ -153,9 +159,9 @@ class DataSeeder implements CommandLineRunner {
 
         postRepository.saveAll(posts);
 
-
         System.out.println("Starting seeding for the Comment");
 
+        List<Comment> comments = new ArrayList<>();
 
         Comment c1 = new Comment();
         c1.setPost(post1);
@@ -163,7 +169,6 @@ class DataSeeder implements CommandLineRunner {
         c1.setText("Spero che i corridoi umanitari vengano aperti il prima possibile, la situazione è critica.");
         c1.setCreatedAt(getRandomTimestamp());
         comments.add(c1);
-
 
         Comment c2 = new Comment();
         c2.setPost(post1);
@@ -187,7 +192,6 @@ class DataSeeder implements CommandLineRunner {
         c4.setMuted(true);
         comments.add(c4);
 
-
         Comment c5 = new Comment();
         c5.setPost(post5);
         c5.setAuthor(user3);
@@ -204,193 +208,89 @@ class DataSeeder implements CommandLineRunner {
 
         commentRepository.saveAll(comments);
 
+        System.out.println("Starting seeding for the Category");
+
+        // --- FIX 2: Corrected Variable Names (You were using ca1 for everything) ---
+        List<Category> categories = new ArrayList<>();
+
+        Category ca1 = new Category();
+        ca1.setCategoryName("Patrimonio culturale");
+        categories.add(ca1);
+
+        Category ca2 = new Category();
+        ca2.setCategoryName("sadas"); // Fixed: using ca2
+        categories.add(ca2);
+
+        Category ca3 = new Category();
+        ca3.setCategoryName("Palla"); // Fixed: using ca3
+        categories.add(ca3);
+
+        Category ca4 = new Category();
+        ca4.setCategoryName("Canestro"); // Fixed: using ca4
+        categories.add(ca4);
+
+        Category ca5 = new Category();
+        ca5.setCategoryName("Lollo"); // Fixed: using ca5
+        categories.add(ca5);
+
+        categoryRepository.saveAll(categories);
 
         System.out.println("Starting seeding for the News");
 
-        Category ca1 = new Category();
-        ca1.
-
-                setCategoryName("Patrimonio culturale");
-        categories.
-
-                add(ca1);
-
-        Category ca2 = new Category();
-        ca1.
-
-                setCategoryName("sadas");
-        categories.
-
-                add(ca2);
-
-        Category ca3 = new Category();
-        ca1.
-
-                setCategoryName("Palla");
-        categories.
-
-                add(ca3);
-
-        Category ca4 = new Category();
-        ca1.
-
-                setCategoryName("Canestro");
-        categories.
-
-                add(ca4);
-
-        Category ca5 = new Category();
-        ca1.
-
-                setCategoryName("Lollo");
-        categories.
-
-                add(ca5);
-
-        categoryRepository.
-
-                saveAll(categories);
+        // --- FIX 3: Cleaned up formatting ---
+        List<News> news = new ArrayList<>();
 
         News n1 = new News();
-        n1.
-
-                setTitle("Nuovi corridoi umanitari aperti nel sud della Striscia");
-        n1.
-
-                setDescription("Accordo raggiunto per il passaggio di aiuti medici e beni di prima necessità.");
-        n1.
-
-                setContent("Dopo giorni di trattative mediate dall'Egitto, è stato confermato l'accesso a 50 camion carichi di forniture mediche. " +
-                        "La distribuzione inizierà nelle prossime ore sotto la supervisione delle Nazioni Unite.");
-        n1.
-
-                setImg("https://picsum.photos/seed/news0/800/600");
-        n1.
-
-                setSrc("Agenzia Stampa Internazionale");
-        n1.
-
-                setLocation("Khan Yunis");
-        n1.
-
-                setPublished_at(getRandomTimestamp());
-        n1.
-
-                setCategory(ca5);
-
-        news.
-
-                add(n1);
+        n1.setTitle("Nuovi corridoi umanitari aperti nel sud della Striscia");
+        n1.setDescription("Accordo raggiunto per il passaggio di aiuti medici e beni di prima necessità.");
+        n1.setContent("Dopo giorni di trattative mediate dall'Egitto, è stato confermato l'accesso a 50 camion carichi di forniture mediche. " +
+                "La distribuzione inizierà nelle prossime ore sotto la supervisione delle Nazioni Unite.");
+        n1.setImg("https://picsum.photos/seed/news0/800/600");
+        n1.setSrc("Agenzia Stampa Internazionale");
+        n1.setLocation("Khan Yunis");
+        n1.setPublished_at(getRandomTimestamp());
+        n1.setCategory(ca5);
+        news.add(n1);
 
         News n2 = new News();
-        n2.
-
-                setTitle("Vertice di pace a Ginevra: le prime dichiarazioni");
-        n2.
-
-                setDescription("Le delegazioni internazionali si incontrano per discutere i termini del cessate il fuoco.");
-        n2.
-
-                setContent("La conferenza di Ginevra del 2026 segna un momento cruciale. I rappresentanti di UE e USA hanno presentato " +
-                        "una bozza di accordo che prevede una zona demilitarizzata e il monitoraggio elettronico dei confini.");
-        n2.
-
-                setImg("https://picsum.photos/seed/news1/800/600");
-        n2.
-
-                setSrc("Diplomatic Post");
-        n2.
-
-                setLocation("Ginevra");
-        n2.
-
-                setPublished_at(getRandomTimestamp());
-        n2.
-
-                setCategory(ca4);
-
-        news.
-
-                add(n2);
-
+        n2.setTitle("Vertice di pace a Ginevra: le prime dichiarazioni");
+        n2.setDescription("Le delegazioni internazionali si incontrano per discutere i termini del cessate il fuoco.");
+        n2.setContent("La conferenza di Ginevra del 2026 segna un momento cruciale. I rappresentanti di UE e USA hanno presentato " +
+                "una bozza di accordo che prevede una zona demilitarizzata e il monitoraggio elettronico dei confini.");
+        n2.setImg("https://picsum.photos/seed/news1/800/600");
+        n2.setSrc("Diplomatic Post");
+        n2.setLocation("Ginevra");
+        n2.setPublished_at(getRandomTimestamp());
+        n2.setCategory(ca4);
+        news.add(n2);
 
         News n3 = new News();
-        n3.
-
-                setTitle("Implementazione di sensori AI lungo la Linea Verde");
-        n3.
-
-                setDescription("Nuove tecnologie per prevenire infiltrazioni e monitorare gli spostamenti civili.");
-        n3.
-
-                setContent("Il nuovo sistema di monitoraggio basato su intelligenza artificiale promette di ridurre gli incidenti armati. " +
-                        "Tuttavia, restano forti dubbi sulla privacy dei cittadini residenti nelle zone limitrofe.");
-        n3.
-
-                setImg("https://picsum.photos/seed/news2/800/600");
-        n3.
-
-                setSrc("Tech & Geopolitics");
-        n3.
-
-                setLocation("Gerusalemme");
-        n3.
-
-                setPublished_at(getRandomTimestamp());
-        n3.
-
-                setCategory(ca2);
-
-        news.
-
-                add(n3);
+        n3.setTitle("Implementazione di sensori AI lungo la Linea Verde");
+        n3.setDescription("Nuove tecnologie per prevenire infiltrazioni e monitorare gli spostamenti civili.");
+        n3.setContent("Il nuovo sistema di monitoraggio basato su intelligenza artificiale promette di ridurre gli incidenti armati. " +
+                "Tuttavia, restano forti dubbi sulla privacy dei cittadini residenti nelle zone limitrofe.");
+        n3.setImg("https://picsum.photos/seed/news2/800/600");
+        n3.setSrc("Tech & Geopolitics");
+        n3.setLocation("Gerusalemme");
+        n3.setPublished_at(getRandomTimestamp());
+        n3.setCategory(ca2);
+        news.add(n3);
 
         News n4 = new News();
-        n4.
+        n4.setTitle("Concerto per la pace: artisti locali si uniscono a Ramallah");
+        n4.setDescription("Un evento musicale per raccogliere fondi destinati alla ricostruzione delle scuole.");
+        n4.setContent("Oltre diecimila persone hanno partecipato al concerto di ieri. I fondi raccolti saranno gestiti " +
+                "da un fondo fiduciario internazionale per la riqualificazione dei centri educativi danneggiati.");
+        n4.setImg("https://picsum.photos/seed/news3/800/600");
+        n4.setSrc("Culture Voice");
+        n4.setLocation("Ramallah");
+        n4.setPublished_at(getRandomTimestamp());
+        n4.setCategory(ca1);
+        news.add(n4);
 
-                setTitle("Concerto per la pace: artisti locali si uniscono a Ramallah");
-        n4.
+        newsRepository.saveAll(news);
 
-                setDescription("Un evento musicale per raccogliere fondi destinati alla ricostruzione delle scuole.");
-        n4.
-
-                setContent("Oltre diecimila persone hanno partecipato al concerto di ieri. I fondi raccolti saranno gestiti " +
-                        "da un fondo fiduciario internazionale per la riqualificazione dei centri educativi danneggiati.");
-        n4.
-
-                setImg("https://picsum.photos/seed/news3/800/600");
-        n4.
-
-                setSrc("Culture Voice");
-        n4.
-
-                setLocation("Ramallah");
-        n4.
-
-                setPublished_at(getRandomTimestamp());
-        n4.
-
-                setCategory(ca1);
-        news.
-
-                add(n4);
-
-        newsRepository.
-
-                saveAll(news);
-
-
-        System.out.
-
-                println("Starting seeding for the Category");
-        System.out.
-
-                println("Starting seeding for the Report");
-
-        System.out.
-
-                println("Database seeded correctly!");
-
+        System.out.println("Database seeded correctly!");
     }
 
     private Timestamp getRandomTimestamp() {
