@@ -1,7 +1,5 @@
 import type { CommentType, NewsType, PostType, UserType } from "./types";
 
-export const BASE_URL = "http://172.31.69.96:8080";
-
 export const palestinianNews: NewsType[] = [
 	{
 		id: 1,

@@ -1,5 +1,4 @@
 import axios from "axios";
-import { BASE_URL } from "./constants";
 import type {
 	CommentType,
 	CreateCommentType,
@@ -8,6 +7,7 @@ import type {
 	NewsType,
 	PostType,
 } from "./types";
+import { ax } from "./Api/api";
 
 export const queriesKeys = {
 	news: {
@@ -32,10 +32,10 @@ type DatabaseType<T, CreateT> = {
 };
 
 export function database<T, CreateT>({ path }: { path: string }) {
-	const base = `${BASE_URL}/${path}`;
+	const base = `${path}`;
 	return {
 		getAll: async () =>
-			await axios
+			await ax
 				.get<T[]>(base)
 				.then((res) => res.data)
 				.catch((e) => {
@@ -43,7 +43,7 @@ export function database<T, CreateT>({ path }: { path: string }) {
 					throw e;
 				}),
 		getOne: async (id: string) =>
-			await axios
+			await ax
 				.get<T[]>(`${base}/${id}`)
 				.then((res) => res.data)
 				.catch((e) => {
@@ -51,7 +51,7 @@ export function database<T, CreateT>({ path }: { path: string }) {
 					throw e;
 				}),
 		create: async (data: CreateT) =>
-			await axios
+			await ax
 				.post<T>(`${base}`, data)
 				.then((res) => res.data)
 				.catch((e) => {
@@ -59,7 +59,7 @@ export function database<T, CreateT>({ path }: { path: string }) {
 					throw e;
 				}),
 		update: async (id: string, data: Partial<CreateT>) =>
-			await axios
+			await ax
 				.put<T>(`${base}/${id}`, data)
 				.then((res) => res.data)
 				.catch((e) => {
@@ -71,7 +71,7 @@ export function database<T, CreateT>({ path }: { path: string }) {
 
 function getQueries<T, CreateT>(
 	key: keyof typeof queriesKeys,
-	db: DatabaseType<T, CreateT>
+	db: DatabaseType<T, CreateT>,
 ) {
 	return {
 		getAll: {
@@ -102,7 +102,7 @@ const postsDatabase: DatabaseType<PostType, CreatePostType> = database({
 const commentsDatabase: DatabaseType<CommentType, CreateCommentType> = database(
 	{
 		path: "comments",
-	}
+	},
 );
 
 export const queries = {
@@ -110,6 +110,6 @@ export const queries = {
 	posts: getQueries<PostType, CreatePostType>("posts", postsDatabase),
 	comments: getQueries<CommentType, CreateCommentType>(
 		"comments",
-		commentsDatabase
+		commentsDatabase,
 	),
 };
