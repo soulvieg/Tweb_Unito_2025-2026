@@ -18,8 +18,8 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="categoryId", nullable = false)
-
     private Integer categoryId;
+
     private String categoryName;
 
     @OneToMany(mappedBy = "category")
