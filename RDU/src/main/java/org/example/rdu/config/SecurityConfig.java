@@ -17,14 +17,33 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/community/**").permitAll()
-                        .requestMatchers("/information/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("admin")
-                        .anyRequest().authenticated()
-                )
-                .formLogin(Customizer.withDefaults());
+                .csrf(csrf -> csrf.disable())
 
+                .cors(cors -> cors.configurationSource(request -> {
+                    var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
+
+
+                    corsConfiguration.setAllowedOrigins(java.util.List.of("http://localhost:5173"));
+
+
+                    corsConfiguration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+                    corsConfiguration.setAllowedHeaders(java.util.List.of("*"));
+
+                    corsConfiguration.setAllowCredentials(true);
+
+                    return corsConfiguration;
+                }))
+
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/category/**").permitAll()
+                        .requestMatchers("/community/**").permitAll()
+                        .requestMatchers("/session/**").permitAll()
+                        .requestMatchers("/user/**").permitAll()
+                        .requestMatchers("/news/**").permitAll()
+
+                        .anyRequest().authenticated()
+                );
         return http.build();
     }
 

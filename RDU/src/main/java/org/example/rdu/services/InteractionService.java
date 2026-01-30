@@ -8,6 +8,7 @@ import org.example.rdu.repositories.PostRepository;
 import org.example.rdu.repositories.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,13 +23,14 @@ public class InteractionService {
 
     @Autowired
     private ReportRepository reportRepository;
-    
+
+    @Transactional
     public List<Post> findAllPosts() {return postRepository.findAll();}
 
-
+    @Transactional
     public Post savePost(Post post) {return postRepository.save(post);}
 
-
+    @Transactional
     public List<Comment> findCommentsByPostId(Integer postId){
 
         Post post = postRepository.findByPostId(postId);
@@ -37,7 +39,7 @@ public class InteractionService {
         return commentRepository.findAllByPost(post);
     }
 
-
+    @Transactional
     public Comment saveComment(Comment comment) {
         Post post = comment.getPost();
 
@@ -46,7 +48,7 @@ public class InteractionService {
         return commentRepository.save(comment);
     }
 
-
+    @Transactional
     public Post updatePost(Integer id, Post postDetails) {
 
         Post post = postRepository.findByPostId(id);
@@ -58,10 +60,17 @@ public class InteractionService {
         return postRepository.save(post);
     }
 
+    @Transactional
+    public void deletePost(Integer id) {
+        List<Comment> comments = commentRepository.findAllByPost(postRepository.findByPostId(id));
+        commentRepository.deleteAll(comments);
+        postRepository.deleteById(id);
+    }
 
+    @Transactional
     public Report saveReport(Report report) {return reportRepository.save(report);}
 
-
+    @Transactional
     public List<Report> findAllReports() {
         return reportRepository.findAll();
     }

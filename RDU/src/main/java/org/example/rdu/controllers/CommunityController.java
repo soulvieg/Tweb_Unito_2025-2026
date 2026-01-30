@@ -5,6 +5,7 @@ import org.example.rdu.entities.Post;
 import org.example.rdu.entities.Report;
 import org.example.rdu.services.InteractionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/community")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class CommunityController {
 
     @Autowired
@@ -46,6 +47,13 @@ public class CommunityController {
     public ResponseEntity<Post> updatePost(@PathVariable Integer id, @RequestBody Post postDetails) {
         return ResponseEntity.ok(interactionService.updatePost(id, postDetails));
     }
+
+    @DeleteMapping("/posts/{id}")
+    public ResponseEntity<String> deletePost(@PathVariable Integer id){
+        interactionService.deletePost(id);
+        return new ResponseEntity<>("Post has been deleted", HttpStatus.OK);
+    }
+
 
     @PostMapping("/reports")
     public ResponseEntity<Report> sendReport(@RequestBody Report report) {

@@ -218,7 +218,6 @@ class DataSeeder implements CommandLineRunner {
                 n1.setSrc("Agenzia Stampa Internazionale");
                 n1.setLocation("Khan Yunis");
                 n1.setPublished_at(getRandomTimestamp());
-                n1.setAuthor(user1);
                 news.add(n1);
 
                 News n2 = new News();
@@ -230,7 +229,6 @@ class DataSeeder implements CommandLineRunner {
                 n2.setSrc("Diplomatic Post");
                 n2.setLocation("Ginevra");
                 n2.setPublished_at(getRandomTimestamp());
-                n2.setAuthor(user2);
                 news.add(n2);
 
 
@@ -243,7 +241,6 @@ class DataSeeder implements CommandLineRunner {
                 n3.setSrc("Tech & Geopolitics");
                 n3.setLocation("Gerusalemme");
                 n3.setPublished_at(getRandomTimestamp());
-                n3.setAuthor(user1);
                 news.add(n3);
 
                 News n4 = new News();
@@ -255,7 +252,6 @@ class DataSeeder implements CommandLineRunner {
                 n4.setSrc("Culture Voice");
                 n4.setLocation("Ramallah");
                 n4.setPublished_at(getRandomTimestamp());
-                n4.setAuthor(user2);
                 news.add(n4);
 
                 newsRepository.saveAll(news);

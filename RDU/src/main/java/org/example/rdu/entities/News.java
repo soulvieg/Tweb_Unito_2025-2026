@@ -3,53 +3,38 @@ package org.example.rdu.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "news")
+@NoArgsConstructor
+@Getter
+@Setter
 public class News {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="newsId", nullable = false)
-    @Getter
     private Integer newsId;
 
-    @Getter
-    @Setter
     private String title;
 
-    @Getter
-    @Setter
     private String description;
 
-    @Getter
-    @Setter
     private String content;
 
-    @Getter
-    @Setter
     private String img;
 
-    @Getter
-    @Setter
     private String src;
 
-    @Getter
-    @Setter
     private String location;
 
-    @Getter
-    @Setter
     private Timestamp published_at;
 
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
-    @Getter
-    @Setter
-    private User author;
-
-    public News(){}
+    @JoinColumn(name="categoryId", nullable = false)
+    private Category category;
 
 }

@@ -2,46 +2,37 @@ package org.example.rdu.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "comments")
+@NoArgsConstructor
+@Getter
+@Setter
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="commentId", nullable = false, unique = true)
-    @Getter
-    @Setter
     private Integer commentId;
 
     @ManyToOne
     @JoinColumn(name = "postId", nullable = false)
-    @Getter
-    @Setter
     private Post post;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
-    @Getter
-    @Setter
     private User author;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
-    @Getter
-    @Setter
+    @Column(columnDefinition = "TEXT")
     private String text;
 
     @Column(nullable = false)
-    @Getter
-    @Setter
     private Timestamp createdAt;
 
     @Column(nullable = false)
-    @Getter
-    @Setter
     private Boolean muted = false;
 
-    public Comment(){}
 }
