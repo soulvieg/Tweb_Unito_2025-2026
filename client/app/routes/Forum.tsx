@@ -1,38 +1,52 @@
 import { use, useState } from "react";
 import { format } from "date-fns";
 import { Link } from "react-router";
-import { MessageSquare, Users, Clock, Plus, Loader2 } from "lucide-react";
+import { MessageSquare, Users, Clock, Trash2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { queries } from "~/lib/api";
+import { queries } from "~/lib/Api/api";
 import Button from "~/components/ui/Button";
 import Skeleton from "~/components/ui/Skeleton";
 import type { PostType } from "~/lib/types";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/Card";
-import Modal, { useModalControl } from "~/components/ui/Modal";
-import { postsList, usersList } from "~/lib/constants";
-import usePagination from "~/hooks/usePagination";
-import useFilter from "~/hooks/useFilter";
+import { useDialogControl } from "~/components/ui/Dialog";
+import useFilterPagination from "~/hooks/useFilterPagination";
 import NavigationButton from "~/components/NavigationButton";
+import { useAuth } from "~/contexts/AuthContext";
+import { is } from "~/lib/utils";
+import { queryClient } from "~/layouts/MainLayout";
+import ForumDialog from "~/components/ForumDialog";
 
 export default function Forum() {
-	const { data: posts, isLoading } = { data: postsList, isLoading: false }; //useQuery(queries.posts.getAll);
-	const { isOpen, onClose, onOpen } = useModalControl();
+	const { user } = useAuth();
+	const { isOpen, onClose, onOpen } = useDialogControl();
+	const [post, setPost] = useState<PostType | undefined>();
+	const [mode, setMode] = useState<"create" | "delete">("create");
 
-	const { filteredItems, filter, onFilterChange, debouncedValue } = useFilter(
-		{
-			keysToSearch: ["title"],
-			items: posts,
-		}
+	const { data: posts, isPending } = useQuery(
+		queries.posts.getAll(),
+		queryClient,
 	);
-	const { paginatedItems, next, prev, canPrev, canNext } = usePagination({
-		itemsPerPage: 6,
-		items: filteredItems,
-	});
 
-	const user = true;
+	const { paginatedItems, next, prev, canPrev, canNext } =
+		useFilterPagination({
+			keysToSearch: ["title"],
+			itemsPerPage: 4,
+			items: posts?.sort(
+				(a, b) =>
+					new Date(b.creationDate).getTime() -
+					new Date(a.creationDate).getTime(),
+			),
+		});
 
 	return (
 		<>
+			<ForumDialog
+				isOpen={isOpen}
+				onClose={onClose}
+				mode={mode}
+				post={post}
+			/>
+
 			<div className="bg-muted/30 py-12 border-b">
 				<div className="container mx-auto px-4">
 					<div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -44,20 +58,17 @@ export default function Forum() {
 								SPEAK YOUR TRUTH. RESPECT THE DIALOGUE.
 							</p>
 						</div>
-						<Modal isOpen={isOpen} onClose={onClose} title="gino">
-							ciaooooo
-						</Modal>
+
 						{user ? (
-							<Button onClick={() => onOpen()}>
+							<Button
+								onClick={() => {
+									setMode("create");
+									onOpen();
+								}}
+							>
 								Start a Discussion
 							</Button>
-						) : (
-							<Link to="/login">
-								<Button className="shadow-lg border-2 border-primary uppercase font-bold">
-									Login to Participate
-								</Button>
-							</Link>
-						)}
+						) : null}
 					</div>
 				</div>
 			</div>
@@ -65,7 +76,7 @@ export default function Forum() {
 			<div className="container mx-auto px-4 py-12">
 				<div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
 					<div className="lg:col-span-3 space-y-4">
-						{isLoading ? (
+						{isPending ? (
 							[1, 2, 3, 4].map((i) => (
 								<div
 									key={i}
@@ -78,7 +89,7 @@ export default function Forum() {
 									</div>
 								</div>
 							))
-						) : posts?.length === 0 ? (
+						) : !posts || posts?.length === 0 ? (
 							<div className="text-center py-20 border rounded-2xl bg-muted/10">
 								<MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
 								<h3 className="text-xl font-bold mb-2">
@@ -89,8 +100,17 @@ export default function Forum() {
 								</p>
 							</div>
 						) : (
-							paginatedItems?.map((post) => (
-								<SinglePost key={post.p_id} post={post} />
+							paginatedItems?.map((post, i) => (
+								<SinglePost
+									index={i}
+									key={post.postId}
+									post={post}
+									setPost={() => {
+										setPost(post);
+										setMode("delete");
+										onOpen();
+									}}
+								/>
 							))
 						)}
 						<NavigationButton
@@ -128,20 +148,35 @@ export default function Forum() {
 	);
 }
 
-function SinglePost({ post }: { post: PostType }) {
-	const { data: author, isLoading } = {
-		data: usersList.find((user) => user.u_id === post.author),
-		isLoading: false,
-	}; //useQuery(queries.posts.getById, {p_id: post.p_id});
+function SinglePost({
+	post,
+	setPost,
+	index,
+}: {
+	post: PostType;
+	setPost: () => void;
+	index: number;
+}) {
+	const { data: author, isPending: isAuthorLoading } = useQuery(
+		{
+			queryKey: ["post", "author", post.author],
+			queryFn: queries.users.getOne(post.author).queryFn,
+		},
+		queryClient,
+	);
+	const { user } = useAuth();
 	return (
 		<Link
-			key={post.p_id}
-			to={`/forum/${post.p_id}`}
+			key={post.postId}
+			to={`/forum/${post.postId}`}
 			className="block group"
 		>
-			<div className="hover:shadow-md transition-all text-slate-300 border-slate-300/60 hover:border-primary/40 border-2 rounded-xl">
+			<div
+				style={{ animationDelay: `${((index ?? 1) % 4) * 100}ms` }}
+				className="hover:shadow-md animate-fade-in-up opacity-0 transition-all text-slate-300 border-slate-300/60 hover:border-primary/40 border-2 rounded-xl"
+			>
 				<div className="p-6">
-					<div className="flex items-start justify-between gap-4">
+					<div className="flex items-start justify-between max-md:flex-col max-md:items-center gap-4">
 						<div className="space-y-1">
 							<h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
 								{post.title}
@@ -149,7 +184,7 @@ function SinglePost({ post }: { post: PostType }) {
 							<div className="flex items-center gap-4 text-sm text-muted-foreground">
 								<span className="flex items-center gap-1">
 									<Users className="w-3 h-3" />
-									{isLoading ? (
+									{isAuthorLoading ? (
 										<Skeleton className="rounded-full w-15  h-3" />
 									) : (
 										author?.username
@@ -158,19 +193,37 @@ function SinglePost({ post }: { post: PostType }) {
 								<span className="flex items-center gap-1">
 									<Clock className="w-3 h-3" />
 									{format(
-										new Date(post.creation_date),
-										"MMM d, yyyy"
+										new Date(post.creationDate),
+										"MMM d, yyyy",
 									)}
 								</span>
 							</div>
 						</div>
-						<div className="flex flex-col items-center justify-center bg-muted/50 rounded-lg p-3 min-w-[4rem]">
-							<span className="text-xl font-bold text-primary">
-								{post.replies_count}
-							</span>
-							<span className="text-[10px] uppercase font-medium text-muted-foreground">
-								Replies
-							</span>
+						<div className="flex items-center gap-4">
+							{is(user).admin ? (
+								<Button
+									onClick={(e) => {
+										e.preventDefault();
+										e.stopPropagation();
+										setPost();
+									}}
+									className="hover:-translate-y-1 hover:shadow shadow-secondary border-2 border-primary uppercase font-bold flex flex-col items-center justify-center  p-3"
+								>
+									<Trash2 className="size-6" />
+
+									<span className="text-[10px] uppercase font-medium text-muted-foreground">
+										Delete
+									</span>
+								</Button>
+							) : null}
+							<div className="flex flex-col items-center justify-center bg-muted/50 rounded-lg p-3 min-w-[4rem]">
+								<span className="text-xl font-bold text-primary">
+									{post.repliesCount}
+								</span>
+								<span className="text-[10px] uppercase font-medium text-muted-foreground">
+									Replies
+								</span>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -178,103 +231,3 @@ function SinglePost({ post }: { post: PostType }) {
 		</Link>
 	);
 }
-
-// function CreateThreadDialog({
-// 	open,
-// 	onOpenChange,
-// }: {
-// 	open: boolean;
-// 	onOpenChange: (open: boolean) => void;
-// }) {
-// 	const { mutate, isPending } = useCreateThread();
-// 	const { user } = useAuth();
-
-// 	const form = useForm<InsertThread>({
-// 		resolver: zodResolver(insertThreadSchema),
-// 		defaultValues: {
-// 			title: "",
-// 			author: user?.username || "",
-// 		},
-// 	});
-
-// 	function onSubmit(data: InsertThread) {
-// 		mutate(data, {
-// 			onSuccess: () => {
-// 				form.reset();
-// 				onOpenChange(false);
-// 			},
-// 		});
-// 	}
-
-// 	return (
-// 		<Dialog open={open} onOpenChange={onOpenChange}>
-// 			<DialogTrigger asChild>
-// 				<Button className="shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all">
-// 					<Plus className="mr-2 h-4 w-4" /> Start Discussion
-// 				</Button>
-// 			</DialogTrigger>
-// 			<DialogContent className="sm:max-w-[500px]">
-// 				<DialogHeader>
-// 					<DialogTitle>Create New Thread</DialogTitle>
-// 					<DialogDescription>
-// 						Start a new discussion topic. Please follow community
-// 						guidelines.
-// 					</DialogDescription>
-// 				</DialogHeader>
-// 				<Form {...form}>
-// 					<form
-// 						onSubmit={form.handleSubmit(onSubmit)}
-// 						className="space-y-4 pt-4"
-// 					>
-// 						<FormField
-// 							control={form.control}
-// 							name="title"
-// 							render={({ field }) => (
-// 								<FormItem>
-// 									<FormLabel>Topic Title</FormLabel>
-// 									<FormControl>
-// 										<Input
-// 											placeholder="What would you like to discuss?"
-// 											{...field}
-// 										/>
-// 									</FormControl>
-// 									<FormMessage />
-// 								</FormItem>
-// 							)}
-// 						/>
-// 						<FormField
-// 							control={form.control}
-// 							name="author"
-// 							render={({ field }) => (
-// 								<FormItem>
-// 									<FormLabel>Your Identity</FormLabel>
-// 									<FormControl>
-// 										<Input
-// 											{...field}
-// 											disabled
-// 											value={user?.username || "Guest"}
-// 											className="bg-muted font-mono"
-// 										/>
-// 									</FormControl>
-// 									<FormMessage />
-// 								</FormItem>
-// 							)}
-// 						/>
-// 						<div className="flex justify-end pt-4">
-// 							<Button type="submit" disabled={isPending}>
-// 								{isPending ? (
-// 									<>
-// 										<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-// 										Creating...
-// 									</>
-// 								) : (
-// 									"Create Thread"
-// 								)}
-// 							</Button>
-// 						</div>
-// 					</form>
-// 				</Form>
-// 			</DialogContent>
-// 		</Dialog>
-// 	);
-// }

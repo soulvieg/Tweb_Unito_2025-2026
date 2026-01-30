@@ -6,27 +6,43 @@ import { NewsCard } from "~/components/NewsCard";
 import Button from "~/components/ui/Button";
 import Skeleton from "~/components/ui/Skeleton";
 import useDebounce from "~/hooks/useDebounce";
-import useFilter from "~/hooks/useFilter";
-import usePagination from "~/hooks/usePagination";
-import { queries } from "~/lib/api";
+import useFilterPagination from "~/hooks/useFilterPagination";
+import { queries } from "~/lib/Api/api";
 import NavigationButton from "~/components/NavigationButton";
+import { queryClient } from "~/layouts/MainLayout";
+import { useDialogControl } from "~/components/ui/Dialog";
+import { useToast } from "~/contexts/ToastContext";
+import { useAuth } from "~/contexts/AuthContext";
+import useForm from "~/hooks/useForm";
+import type { CreateNewsType } from "~/lib/types";
+import NewsDialog from "~/components/NewsDialog";
+import { is } from "~/lib/utils";
 
 export default function News() {
-	const { data: news, isLoading } = useQuery(queries.news.getAll);
-
-	const { filteredItems, filter, onFilterChange, debouncedValue } = useFilter(
-		{
-			keysToSearch: ["title", "description"],
-			items: news,
-		}
+	const { data: news, isPending } = useQuery(
+		queries.news.getAll(),
+		queryClient,
 	);
-	const { paginatedItems, next, prev, canPrev, canNext } = usePagination({
-		itemsPerPage: 6,
-		items: filteredItems,
-	});
+	const { user } = useAuth();
 
+	const { isOpen, onClose, onOpen } = useDialogControl();
+
+	const {
+		paginatedItems,
+		next,
+		prev,
+		canPrev,
+		canNext,
+		filter,
+		onFilterChange,
+	} = useFilterPagination({
+		keysToSearch: ["title", "description"],
+		itemsPerPage: 6,
+		items: news,
+	});
 	return (
 		<div className="relative bg-primary-foreground">
+			<NewsDialog isOpen={isOpen} onClose={onClose} mode={"create"} />
 			<div className="bg-muted/20 border-b py-12 md:py-20 bg-secondary-foreground">
 				<div className="container mx-auto px-4 text-center max-w-3xl">
 					<h1 className="text-4xl md:text-5xl font-display font-bold mb-6">
@@ -36,20 +52,25 @@ export default function News() {
 						Comprehensive coverage and neutral reporting on the
 						latest developments.
 					</p>
-					<div className="relative max-w-md mx-auto">
-						<Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+					<div className="relative w-md max-md:w-xs mx-auto  ">
+						<Search className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
 						<input
-							className="pl-10 h-12 rounded-xl bg-background shadow-sm w-md bg-primary-foreground border border-slate-800"
+							className="pl-10 h-12 rounded-xl bg-background shadow-sm md:w-md max-md:w-xs max-w-screen  bg-primary-foreground border border-slate-800"
 							placeholder="Search news..."
 							value={filter}
 							onChange={onFilterChange}
 						/>
 					</div>
+					{is(user).admin ? (
+						<div className="mt-6">
+							<Button onClick={onOpen}>Create News</Button>
+						</div>
+					) : null}
 				</div>
 			</div>
 
 			<div className="container mx-auto px-4 py-12 ">
-				{isLoading ? (
+				{isPending ? (
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 						{[1, 2, 3, 4, 5, 6].map((i) => (
 							<div key={i} className="space-y-4">
@@ -72,7 +93,7 @@ export default function News() {
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 						{paginatedItems?.map((article, i) => (
 							<NewsCard
-								key={article.id + debouncedValue}
+								key={article.newsId}
 								article={article}
 								index={i}
 							/>

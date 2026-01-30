@@ -14,7 +14,7 @@ export function NewsCard({
 	index?: number;
 }) {
 	return (
-		<Link to={`/news/${article.id}`} className="group block h-full">
+		<Link to={`/news/${article.newsId}`} className="group block h-full">
 			<div
 				style={{ animationDelay: `${((index ?? 1) % 3) * 100}ms` }}
 				className={`rounded-xl h-full opacity-0 overflow-hidden animate-fade-in-up transition-all duration-300 border-2  hover:border-primary hover:shadow-2xl ${featured ? "border-primary bg-primary/10" : "border-muted hover:bg-primary/5"}`}
@@ -41,7 +41,7 @@ export function NewsCard({
 									"d MMM, yyyy",
 									{
 										locale: it,
-									}
+									},
 								)}
 							</div>
 							{article.location && (

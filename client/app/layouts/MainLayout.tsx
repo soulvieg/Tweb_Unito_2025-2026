@@ -3,8 +3,16 @@ import React from "react";
 import { Outlet, useLocation } from "react-router";
 import Footer from "~/components/Footer";
 import Header from "~/components/Header";
+import { AuthProvider } from "~/contexts/AuthContext";
+import { ToastProvider } from "~/contexts/ToastContext";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			retry: 2,
+		},
+	},
+});
 
 export default function MainLayout() {
 	const location = useLocation();
@@ -12,19 +20,25 @@ export default function MainLayout() {
 	return (
 		<>
 			<QueryClientProvider client={queryClient}>
-				<Header />
-				<main
-					className="animate-fade-in-up bg-black text-foreground antialiased selection:bg-primary/10 font-body"
-					key={"main_layout_" + location.pathname}
-					onAnimationEnd={(e) => {
-						//per far funzionare il modal senza problemi di trasform e animazione
-						e.currentTarget.style.transform = "none";
-						e.currentTarget.style.animation = "none";
-					}}
-				>
-					<Outlet />
-				</main>
-				<Footer />
+				<ToastProvider>
+					<AuthProvider>
+						<div>
+							<Header />
+							<main
+								className="animate-fade-in-up bg-black text-foreground antialiased selection:bg-primary/10 font-body"
+								key={"main_layout_" + location.pathname}
+								onAnimationEnd={(e) => {
+									//per far funzionare il modal senza problemi di trasform e animazione
+									e.currentTarget.style.transform = "none";
+									e.currentTarget.style.animation = "none";
+								}}
+							>
+								<Outlet />
+							</main>
+							<Footer />
+						</div>
+					</AuthProvider>
+				</ToastProvider>
 			</QueryClientProvider>
 		</>
 	);

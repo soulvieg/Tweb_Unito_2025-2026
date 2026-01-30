@@ -5,12 +5,19 @@ import { ArrowRight } from "lucide-react";
 import Skeleton from "./ui/Skeleton";
 import { palestinianNews } from "~/lib/constants";
 import { NewsCard } from "./NewsCard";
+import { queries } from "~/lib/Api/api";
+import { queryClient } from "~/layouts/MainLayout";
+import { useQuery } from "@tanstack/react-query";
+import type { NewsType } from "~/lib/types";
 
 export default function LatestNews() {
-	const isLoading = false;
+	const { data: latest, isPending } = useQuery(
+		queries.news.getAll(),
+		queryClient,
+	);
 	return (
 		<div className="py-16 md:py-24 container mx-auto px-4 border-t-4 border-primary bg-primary-foreground ">
-			<div className="flex items-center justify-between mb-12">
+			<div className="flex max-md:flex-col items-center justify-between mb-12">
 				<div>
 					<h2 className="text-4xl font-display font-black mb-2">
 						FRONTLINE UPDATES
@@ -26,7 +33,7 @@ export default function LatestNews() {
 				</Link>
 			</div>
 
-			{isLoading ? (
+			{isPending ? (
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 					{[1, 2, 3].map((i) => (
 						<div key={i} className="space-y-4">
@@ -38,12 +45,18 @@ export default function LatestNews() {
 						</div>
 					))}
 				</div>
+			) : !latest || latest?.length === 0 ? (
+				<div className="text-center py-20 animate-fade-in-up">
+					<h3 className="text-xl font-bold text-muted-foreground">
+						No articles found matching your search.
+					</h3>
+				</div>
 			) : (
 				<div className="w-full">
-					<div className="-ml-4 flex bg-primary-foreground">
-						{palestinianNews?.slice(0, 3).map((article) => (
+					<div className="-ml-4 flex max-md:flex-col gap-4 bg-primary-foreground">
+						{latest?.slice(0, 3).map((article: NewsType) => (
 							<div
-								key={article.id}
+								key={article.newsId}
 								className="pl-4 md:basis-1/2 lg:basis-1/3"
 							>
 								<div className="h-full">

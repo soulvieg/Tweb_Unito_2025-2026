@@ -2,7 +2,7 @@ import type { CommentType, NewsType, PostType, UserType } from "./types";
 
 export const palestinianNews: NewsType[] = [
 	{
-		id: 1,
+		newsId: 1,
 		title: "Le tempeste invernali aggravano la crisi umanitaria a Gaza",
 		description:
 			"Temperature gelide e inondazioni minacciano 55.000 famiglie nei campi sfollati mentre le infrastrutture collassano.",
@@ -12,10 +12,10 @@ export const palestinianNews: NewsType[] = [
 		published_at: new Date("2026-01-02T10:30:00"),
 		src: "UN OCHA / ReliefWeb",
 		location: "Striscia di Gaza",
-		// author: 0,
+		categoryId: 0,
 	},
 	{
-		id: 2,
+		newsId: 2,
 		title: "Spinta diplomatica per la 'Fase 2' del piano di pace",
 		description:
 			"I diplomatici accelerano per lanciare la fase successiva del piano, concentrandosi su governance e sicurezza nonostante le tensioni.",
@@ -25,10 +25,10 @@ export const palestinianNews: NewsType[] = [
 		published_at: new Date("2026-01-01T14:15:00"),
 		src: "Global Diplomatic Wire",
 		location: "Doha / Gerusalemme",
-		// author: 0,
+		categoryId: 0,
 	},
 	{
-		id: 3,
+		newsId: 3,
 		title: "Nuovi ordini di sgombero nel campo di Nur Shams",
 		description:
 			"Nuovi ordini di demolizione a Tulkarem costringono i residenti all'evacuazione, scatenando proteste e critiche internazionali.",
@@ -38,10 +38,10 @@ export const palestinianNews: NewsType[] = [
 		published_at: new Date("2025-12-30T09:00:00"),
 		src: "West Bank Monitor",
 		location: "Tulkarem, Cisgiordania",
-		// author: 0,
+		categoryId: 0,
 	},
 	{
-		id: 4,
+		newsId: 4,
 		title: "Migliaia in piazza a Istanbul per solidarietà a Capodanno",
 		description:
 			"Migliaia di persone si riuniscono al Ponte di Galata chiedendo un cessate il fuoco permanente e sostegno alla ricostruzione.",
@@ -51,10 +51,10 @@ export const palestinianNews: NewsType[] = [
 		published_at: new Date("2026-01-01T16:45:00"),
 		src: "Al Jazeera / Agenzie Locali",
 		location: "Istanbul, Turchia",
-		// author: 0,
+		categoryId: 0,
 	},
 	{
-		id: 5,
+		newsId: 5,
 		title: "Le ONG avvertono del collasso operativo per i nuovi blocchi",
 		description:
 			"53 ONG internazionali avvertono che le nuove regole burocratiche potrebbero bloccare gli aiuti medici e alimentari entro febbraio.",
@@ -64,10 +64,10 @@ export const palestinianNews: NewsType[] = [
 		published_at: new Date("2026-01-02T08:00:00"),
 		src: "Humanitarian Aid Coalition",
 		location: "Gerusalemme / Ramallah",
-		// author: 0,
+		categoryId: 0,
 	},
 	{
-		id: 6,
+		newsId: 6,
 		title: "Scuole di fortuna riaprono tra le macerie a Khan Younis",
 		description:
 			"Insegnanti volontari avviano classi in tende improvvisate per garantire un'istruzione a migliaia di bambini rimasti senza scuola.",
@@ -77,10 +77,10 @@ export const palestinianNews: NewsType[] = [
 		published_at: new Date("2026-01-03T09:15:00"),
 		src: "Education Without Borders",
 		location: "Khan Younis, Gaza",
-		// author: 0,
+		categoryId: 0,
 	},
 	{
-		id: 7,
+		newsId: 7,
 		title: "Allarme sanitario: scorte critiche di antibiotici negli ospedali",
 		description:
 			"I medici lanciano l'allarme per la carenza di farmaci essenziali mentre le infezioni invernali aumentano drasticamente.",
@@ -90,10 +90,10 @@ export const palestinianNews: NewsType[] = [
 		published_at: new Date("2026-01-02T11:45:00"),
 		src: "Health Ministry / WHO",
 		location: "Rafah",
-		// author: 0,
+		categoryId: 0,
 	},
 	{
-		id: 8,
+		newsId: 8,
 		title: "L'UNESCO valuta lo stato del patrimonio storico a Nablus",
 		description:
 			"Una delegazione internazionale arriva per valutare i danni ai siti storici della Città Vecchia dopo i recenti scontri.",
@@ -103,10 +103,10 @@ export const palestinianNews: NewsType[] = [
 		published_at: new Date("2025-12-29T15:30:00"),
 		src: "Cultural Heritage Watch",
 		location: "Nablus, Cisgiordania",
-		// author: 0,
+		categoryId: 0,
 	},
 	{
-		id: 9,
+		newsId: 9,
 		title: "Ripresa limitata dell'export agricolo: prime fragole verso l'Europa",
 		description:
 			"Il primo carico di prodotti agricoli lascia la striscia dopo mesi di blocco, offrendo una speranza economica agli agricoltori.",
@@ -116,10 +116,10 @@ export const palestinianNews: NewsType[] = [
 		published_at: new Date("2026-01-03T07:00:00"),
 		src: "AgriTrade Weekly",
 		location: "Valico di Kerem Shalom",
-		// author: 0,
+		categoryId: 0,
 	},
 	{
-		id: 10,
+		newsId: 10,
 		title: "Mostra d'arte digitale 'Voci da Gaza' apre a Londra",
 		description:
 			"Artisti palestinesi inaugurano una galleria virtuale immersiva per raccontare storie di vita quotidiana e resistenza.",
@@ -129,58 +129,37 @@ export const palestinianNews: NewsType[] = [
 		published_at: new Date("2026-01-01T18:00:00"),
 		src: "ArtReview",
 		location: "Londra / Gaza (Virtuale)",
-		// author: 0,
-	},
-];
-
-export const usersList: UserType[] = [
-	{
-		u_id: 1,
-		username: "Admin_Relief",
-		password: "$2b$10$X7...hashedpassword...",
-		role: "admin",
-	},
-	{
-		u_id: 2,
-		username: "Dr_Amira_H",
-		password: "$2b$10$Y8...hashedpassword...",
-		role: "user",
-	},
-	{
-		u_id: 3,
-		username: "Sami_Press_Gaza",
-		password: "$2b$10$Z9...hashedpassword...",
-		role: "user",
+		categoryId: 0,
 	},
 ];
 
 export const postsList: PostType[] = [
 	{
-		p_id: 101,
-		u_id: 2, // Dr_Amira_H
+		postId: 101,
+		// Dr_Amira_H
 		title: "Situazione critica al reparto pediatrico",
 		text: "Le scorte di antibiotici e latte in polvere sono quasi esaurite. I generatori di emergenza stanno funzionando a intermittenza a causa della carenza di carburante.",
-		creation_date: new Date("2026-01-14T08:30:00"),
+		creationDate: new Date("2026-01-14T08:30:00"),
 		author: 2,
-		replies_count: 0,
+		repliesCount: 0,
 	},
 	{
-		p_id: 102,
-		u_id: 1, // Admin_Relief
+		postId: 102,
+		// Admin_Relief
 		title: "Aggiornamento distribuzione aiuti alimentari - Zona Sud",
 		text: "Tre camion UNRWA sono arrivati oggi a Rafah. La distribuzione dei pacchi alimentari inizierà domani alle 06:00 presso il centro di smistamento.",
-		creation_date: new Date("2026-01-14T10:15:00"),
+		creationDate: new Date("2026-01-14T10:15:00"),
 		author: 1,
-		replies_count: 2,
+		repliesCount: 2,
 	},
 	{
-		p_id: 103,
-		u_id: 3, // Sami_Press_Gaza
+		postId: 103,
+		// Sami_Press_Gaza
 		title: "Danni strutturali dopo la tempesta di stanotte",
 		text: "Le forti piogge hanno allagato diverse tendopoli a Khan Younis. Centinaia di famiglie necessitano di coperte asciutte e teloni impermeabili immediatamente.",
-		creation_date: new Date("2026-01-14T12:00:00"),
+		creationDate: new Date("2026-01-14T12:00:00"),
 		author: 3,
-		replies_count: 1,
+		repliesCount: 1,
 	},
 ];
 
@@ -188,24 +167,27 @@ export const postsList: PostType[] = [
 // Nota: 'p_id' collega al post, 'u_id' collega all'autore del commento
 export const commentsList: CommentType[] = [
 	{
-		c_id: 501,
-		p_id: 103, // Commento sul post medico
-		u_id: 1, // Scritto dall'Admin
+		commentId: 501,
+		postId: 103, // Commento sul post medico
+		author: 1, // Scritto dall'Admin
 		text: "Stiamo coordinando con l'OMS per una consegna d'emergenza entro stasera. Tenete duro.",
-		creation_date: new Date("2025-01-15T12:00:00"),
+		creationDate: new Date("2025-01-15T12:00:00"),
+		muted: false,
 	},
 	{
-		c_id: 502,
-		p_id: 102, // Commento sul post cibo
-		u_id: 3, // Scritto dal Giornalista
+		commentId: 502,
+		postId: 102, // Commento sul post cibo
+		author: 3, // Scritto dal Giornalista
 		text: "Potete confermare se ci sarà anche acqua potabile? La gente lo sta chiedendo.",
-		creation_date: new Date("2026-01-13T12:00:00"),
+		creationDate: new Date("2026-01-13T12:00:00"),
+		muted: false,
 	},
 	{
-		c_id: 503,
-		p_id: 102, // Commento sul post tempesta
-		u_id: 2, // Scritto dalla Dottoressa
+		commentId: 503,
+		postId: 102, // Commento sul post tempesta
+		author: 2, // Scritto dalla Dottoressa
 		text: "Stiamo vedendo i primi casi di ipotermia arrivare in ospedale da quella zona. Serve agire subito.",
-		creation_date: new Date("2024-01-17T12:00:00"),
+		creationDate: new Date("2024-01-17T12:00:00"),
+		muted: false,
 	},
 ];

@@ -2,7 +2,6 @@ import type {
 	CommentType,
 	CreateCommentType,
 	CreateNewsType,
-	DatabaseType,
 	NewsType,
 	UserType,
 } from "../../types";

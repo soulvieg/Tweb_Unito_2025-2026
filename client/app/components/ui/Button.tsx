@@ -1,3 +1,4 @@
+import { Loader2 } from "lucide-react";
 import React, {
 	type ButtonHTMLAttributes,
 	type PropsWithChildren,
@@ -25,27 +26,57 @@ const sizes: Record<SizesType, string> = {
 	icon: "h-9 w-9",
 };
 
+type ButtonProps = {
+	variant?: StyleType;
+	size?: SizesType;
+	noStyle?: boolean;
+} & PropsWithChildren &
+	ClassNameType &
+	ButtonHTMLAttributes<HTMLButtonElement>;
+
 export default function Button({
 	children,
 	className,
 	variant = "destructive",
 	size = "default",
+	noStyle = false,
 	...rest
-}: { variant?: StyleType; size?: SizesType } & PropsWithChildren &
-	ClassNameType &
-	ButtonHTMLAttributes<HTMLButtonElement>) {
+}: ButtonProps) {
 	return (
 		<button
-			className={cn(
-				"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50" +
-					"  active-elevate-2 cursor-pointer active:scale-95 hover:brightness-110",
-				styles[variant as StyleType] ?? "",
-				sizes[size as SizesType] ?? "",
-				className ?? ""
-			)}
+			className={
+				!noStyle
+					? cn(
+							"inline-flex items-center justify-center transition-all gap-2 whitespace-nowrap rounded-md text-sm font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+							"hover:-translate-y-1 hover:shadow hover:shadow-secondary border-2 border-primary  active-elevate-2 cursor-pointer active:translate-y-0  active:shadow-none hover:brightness-110",
+							"disabled:opacity-70 disabled:pointer-events-none",
+							styles[variant as StyleType] ?? "",
+							sizes[size as SizesType] ?? "",
+							className ?? "",
+						)
+					: (className ?? "")
+			}
 			{...rest}
 		>
 			{children}
 		</button>
+	);
+}
+
+export function MutateButton({
+	isPending,
+	children,
+	...rest
+}: ButtonProps & { isPending: boolean }) {
+	return (
+		<Button {...rest} disabled={isPending}>
+			{isPending ? (
+				<>
+					<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+				</>
+			) : (
+				children
+			)}
+		</Button>
 	);
 }

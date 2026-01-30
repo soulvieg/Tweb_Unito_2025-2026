@@ -15,5 +15,7 @@ export default [
 		route("news/:id", "routes/NewsDetails.tsx"),
 
 		route("about", "routes/About.tsx"),
+		route("auth", "routes/AuthPage.tsx"),
+		route("*", "routes/NotFound.tsx"),
 	]),
 ] satisfies RouteConfig;
