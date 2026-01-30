@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/news")
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:5173")
 class NewsController {
 
     @Autowired
@@ -30,12 +30,13 @@ class NewsController {
         return ResponseEntity.ok(contentService.findNewsById(id));
     }
 
+    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
     @PostMapping
     public ResponseEntity<News> createNews(@RequestBody News news) {
         return ResponseEntity.status(201).body(contentService.saveNews(news));
     }
 
-
+    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
     @PutMapping("/{id}")
     public ResponseEntity<News> updateNews(@PathVariable Integer id, @RequestBody News news){
         News newsUpdate = contentService.findNewsById(id);
@@ -51,6 +52,7 @@ class NewsController {
         return new ResponseEntity<>(contentService.saveNews(newsUpdate), HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteNews(@PathVariable Integer id){
         News newsUpdate = contentService.findNewsById(id);
