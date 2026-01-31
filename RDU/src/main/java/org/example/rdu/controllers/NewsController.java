@@ -7,6 +7,7 @@ import org.example.rdu.services.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -68,6 +69,7 @@ class NewsController {
 
     @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteNews(@PathVariable Integer id){
         News newsUpdate = contentService.findNewsById(id);
         if(newsUpdate == null){return ResponseEntity.status(HttpStatus.NOT_FOUND).body("News not found in the database");}

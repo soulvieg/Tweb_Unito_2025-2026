@@ -13,6 +13,7 @@ import org.example.rdu.services.InteractionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -75,9 +76,20 @@ public class CommunityController {
     }
 
     @DeleteMapping("/posts/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deletePost(@PathVariable Integer id){
         interactionService.deletePost(id);
         return new ResponseEntity<>("Post has been deleted", HttpStatus.OK);
+    }
+
+    @PutMapping("/comments/{id}/mute")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<CommentDTO> muteComment(@PathVariable Integer id) {
+        Comment toggledComment = interactionService.muteComment(id);
+        if (toggledComment == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(commentMapper.toDTO(toggledComment));
     }
 
 

@@ -8,10 +8,17 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.example.rdu.entities.UserType;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 
 @Component
 @Order(1)
@@ -27,7 +34,7 @@ public class LoginFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        // ✅ Allow CORS preflight
+
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
@@ -36,7 +43,8 @@ public class LoginFilter implements Filter {
         String path = request.getServletPath();
 
         // ✅ Public endpoints
-        if (path.startsWith("/news") || path.startsWith("/session")) {
+        if (path.startsWith("/news") || path.startsWith("/session") ||
+            path.startsWith("/category") || path.startsWith("/community")) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
@@ -47,6 +55,18 @@ public class LoginFilter implements Filter {
                 session != null && session.getAttribute("username") != null;
 
         if (isLoggedIn) {
+            String username = (String) session.getAttribute("username");
+            UserType userType = (UserType) session.getAttribute("role");
+
+            // Create Spring Security authentication
+            Collection<GrantedAuthority> authorities = userType == UserType.admin
+                    ? Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"))
+                    : Collections.emptyList();
+
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(username, null, authorities);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
             response.sendError(

@@ -68,6 +68,16 @@ public class InteractionService {
     }
 
     @Transactional
+    public Comment muteComment(Integer commentId) {
+        Comment comment = commentRepository.findById(commentId).orElse(null);
+        if (comment != null) {
+            comment.setMuted(!comment.getMuted());
+            return commentRepository.save(comment);
+        }
+        return null;
+    }
+
+    @Transactional
     public Report saveReport(Report report) {return reportRepository.save(report);}
 
     @Transactional

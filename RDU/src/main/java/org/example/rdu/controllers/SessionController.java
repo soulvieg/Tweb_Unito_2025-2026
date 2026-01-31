@@ -12,9 +12,15 @@ import org.example.rdu.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 
 @RestController
@@ -67,6 +73,15 @@ public class SessionController {
         session.setAttribute("userId", user.getUserId());
         session.setAttribute("username", user.getUsername());
         session.setAttribute("role", user.getUserType());
+
+        // Create Spring Security authentication
+        Collection<GrantedAuthority> authorities = user.getUserType() == UserType.admin
+                ? Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"))
+                : Collections.emptyList();
+
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(user.getUsername(), null, authorities);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         SessionData response = new SessionData(user.getUserId(), user.getUsername(), user.getUserType(), "Login successful!");
         return ResponseEntity.ok(response);

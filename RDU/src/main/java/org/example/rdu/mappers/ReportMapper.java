@@ -4,6 +4,8 @@ import org.example.rdu.dtos.ReportDTO;
 import org.example.rdu.entities.Report;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
+
 @Component
 public class ReportMapper {
     public ReportDTO toDTO(Report report) {
@@ -27,10 +29,7 @@ public class ReportMapper {
         report.setReason(reportDTO.reason());
         report.setCommentId(reportDTO.commentId());
         report.setReporterId(reportDTO.reporterId());
-
-        // createdAt is missing in DTO, handled by DB or Service usually
-        // report.setCreatedAt(...);
-
+        report.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         return report;
 }
 }
