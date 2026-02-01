@@ -18,6 +18,7 @@ public class PostMapper {
                 post.getPostId(),
                 userId,
                 post.getTitle(),
+                post.getText(),
                 post.getCreationDate(),
                 post.getCount_replies()
         );

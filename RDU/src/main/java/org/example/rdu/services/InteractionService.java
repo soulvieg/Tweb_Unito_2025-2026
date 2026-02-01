@@ -1,8 +1,11 @@
 package org.example.rdu.services;
 
+import org.example.rdu.dtos.CreateCommentDTO;
+import org.example.rdu.dtos.CreatePostDTO;
 import org.example.rdu.entities.Comment;
 import org.example.rdu.entities.Post;
 import org.example.rdu.entities.Report;
+import org.example.rdu.entities.User;
 import org.example.rdu.repositories.CommentRepository;
 import org.example.rdu.repositories.PostRepository;
 import org.example.rdu.repositories.ReportRepository;
@@ -10,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -22,13 +27,31 @@ public class InteractionService {
     private CommentRepository commentRepository;
 
     @Autowired
+    private UserService userService;
+
+
+    @Autowired
     private ReportRepository reportRepository;
 
     @Transactional
     public List<Post> findAllPosts() {return postRepository.findAll();}
 
     @Transactional
-    public Post savePost(Post post) {return postRepository.save(post);}
+    public Post findPost(Integer postId) {return postRepository.findByPostId(postId);}
+
+    @Transactional
+    public Post savePost(CreatePostDTO post) {
+        Post p = new Post();
+        User author = userService.findUser(post.userId());
+
+        p.setCount_replies(0);
+        p.setCreationDate(Timestamp.from(Instant.now()));
+        p.setTitle(post.title());
+        p.setText(post.text());
+
+        if(author != null) p.setAuthor(author);
+        return postRepository.save(p);
+    }
 
     @Transactional
     public List<Comment> findCommentsByPostId(Integer postId){
@@ -40,12 +63,20 @@ public class InteractionService {
     }
 
     @Transactional
-    public Comment saveComment(Comment comment) {
-        Post post = comment.getPost();
+    public Comment saveComment(CreateCommentDTO comment) {
+        Comment c = new Comment();
+        User author = userService.findUser(comment.userId());
+        Post post = findPost(comment.postId());
+
+        c.setMuted(false);
+        c.setText(comment.text());
+        c.setCreatedAt(Timestamp.from(Instant.now()));
+        if(author != null) c.setAuthor(author);
+        if(post != null) c.setPost(post);
 
         post.setCount_replies(post.getCount_replies() + 1);
-
-        return commentRepository.save(comment);
+        postRepository.save(post);
+        return commentRepository.save(c);
     }
 
     @Transactional
@@ -78,7 +109,10 @@ public class InteractionService {
     }
 
     @Transactional
-    public Report saveReport(Report report) {return reportRepository.save(report);}
+    public Report saveReport(Report report) {
+
+        return reportRepository.save(report);
+    }
 
     @Transactional
     public List<Report> findAllReports() {

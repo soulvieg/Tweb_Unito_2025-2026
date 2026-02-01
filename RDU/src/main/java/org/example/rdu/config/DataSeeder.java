@@ -105,7 +105,7 @@ class DataSeeder implements CommandLineRunner {
                 "esaminando il ruolo della diplomazia internazionale nel tentativo di mediare una tregua duratura " +
                 "e garantire l'accesso ai corridoi umanitari.");
         post1.setCreationDate(getRandomTimestamp());
-        post1.setCount_replies(5);
+        post1.setCount_replies(2);
         post1.setAuthor(user3);
         posts.add(post1);
 
@@ -121,7 +121,7 @@ class DataSeeder implements CommandLineRunner {
         post3.setTitle("L'impatto del conflitto sulle infrastrutture civili");
         post3.setText("Un report dettagliato sulla ricostruzione necessaria nelle zone colpite. Come la comunità internazionale può intervenire per ripristinare i servizi di base?");
         post3.setCreationDate(getRandomTimestamp());
-        post3.setCount_replies(3);
+        post3.setCount_replies(0);
         post3.setAuthor(user5);
         posts.add(post3);
 
@@ -129,7 +129,7 @@ class DataSeeder implements CommandLineRunner {
         post4.setTitle("Voci dal campo: testimonianze dei volontari medici");
         post4.setText("Abbiamo raccolto le storie di chi lavora negli ospedali da campo. Una prospettiva umana e cruda sulle difficoltà quotidiane della sanità.");
         post4.setCreationDate(getRandomTimestamp());
-        post4.setCount_replies(2);
+        post4.setCount_replies(0);
         post4.setAuthor(user5);
         posts.add(post4);
 
@@ -137,7 +137,7 @@ class DataSeeder implements CommandLineRunner {
         post5.setTitle("Sicurezza e confini: le nuove tecnologie di monitoraggio");
         post5.setText("L'uso di droni e AI per la sorveglianza delle linee di demarcazione sta cambiando il volto della sicurezza nell'area. Quali sono le implicazioni etiche?");
         post5.setCreationDate(getRandomTimestamp());
-        post5.setCount_replies(0);
+        post5.setCount_replies(1);
         post5.setAuthor(user3);
         posts.add(post5);
 
@@ -145,7 +145,7 @@ class DataSeeder implements CommandLineRunner {
         post6.setTitle("Educazione sotto assedio: il futuro delle scuole a Gaza");
         post6.setText("Migliaia di bambini hanno perso l'accesso all'istruzione. Esploriamo le iniziative di e-learning nate per sopperire alla chiusura delle scuole.");
         post6.setCreationDate(getRandomTimestamp());
-        post6.setCount_replies(3);
+        post6.setCount_replies(1);
         post6.setAuthor(user3);
         posts.add(post6);
 
@@ -153,7 +153,7 @@ class DataSeeder implements CommandLineRunner {
         post7.setTitle("Patrimonio culturale: i siti storici a rischio");
         post7.setText("Non solo vite umane, ma anche millenni di storia sono sotto minaccia. Un appello dell'UNESCO per la protezione dei siti archeologici.");
         post7.setCreationDate(getRandomTimestamp());
-        post7.setCount_replies(2);
+        post7.setCount_replies(0);
         post7.setAuthor(user5);
         posts.add(post7);
 

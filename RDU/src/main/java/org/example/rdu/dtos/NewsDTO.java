@@ -13,3 +13,4 @@ public record NewsDTO(
         String location,
         Timestamp published_at
 ){}
+

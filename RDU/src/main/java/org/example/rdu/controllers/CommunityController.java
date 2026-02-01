@@ -1,8 +1,6 @@
 package org.example.rdu.controllers;
 
-import org.example.rdu.dtos.CommentDTO;
-import org.example.rdu.dtos.PostDTO;
-import org.example.rdu.dtos.ReportDTO;
+import org.example.rdu.dtos.*;
 import org.example.rdu.entities.Comment;
 import org.example.rdu.entities.Post;
 import org.example.rdu.entities.Report;
@@ -10,12 +8,15 @@ import org.example.rdu.mappers.CommentMapper;
 import org.example.rdu.mappers.PostMapper;
 import org.example.rdu.mappers.ReportMapper;
 import org.example.rdu.services.InteractionService;
+import org.example.rdu.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 @RestController
@@ -25,6 +26,9 @@ public class CommunityController {
 
     @Autowired
     private InteractionService interactionService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private PostMapper postMapper;
@@ -45,28 +49,17 @@ public class CommunityController {
         return ResponseEntity.ok(postDTOs);
     }
 
+    @GetMapping("/posts/{id}")
+    public ResponseEntity<PostDTO> getPost(@PathVariable Integer id) {
+        Post post = interactionService.findPost(id);
+        return ResponseEntity.ok(postMapper.toDTO(post));
+    }
+
 
     @PostMapping("/posts")
-    public ResponseEntity<PostDTO> createPost(@RequestBody Post post) {
+    public ResponseEntity<PostDTO> createPost(@RequestBody CreatePostDTO post) {
         Post createdPost = interactionService.savePost(post);
         return ResponseEntity.status(201).body(postMapper.toDTO(createdPost));
-    }
-
-
-    @GetMapping("/posts/{postId}/comments")
-    public ResponseEntity<List<CommentDTO>> getCommentsByPost(@PathVariable Integer postId) {
-        List<Comment> comments = interactionService.findCommentsByPostId(postId);
-        List<CommentDTO> commentDTOs = comments.stream()
-                .map(commentMapper::toDTO)
-                .toList();
-        return ResponseEntity.ok(commentDTOs);
-    }
-
-
-    @PostMapping("/comments")
-    public ResponseEntity<CommentDTO> addComment(@RequestBody Comment comment) {
-        Comment createdComment = interactionService.saveComment(comment);
-        return ResponseEntity.ok(commentMapper.toDTO(createdComment));
     }
 
     @PutMapping("/posts/{id}")
@@ -82,6 +75,21 @@ public class CommunityController {
         return new ResponseEntity<>("Post has been deleted", HttpStatus.OK);
     }
 
+    @GetMapping("/posts/{postId}/comments")
+    public ResponseEntity<List<CommentDTO>> getCommentsByPost(@PathVariable Integer postId) {
+        List<Comment> comments = interactionService.findCommentsByPostId(postId);
+        List<CommentDTO> commentDTOs = comments.stream()
+                .map(commentMapper::toDTO)
+                .toList();
+        return ResponseEntity.ok(commentDTOs);
+    }
+
+    @PostMapping("/comments")
+    public ResponseEntity<CommentDTO> addComment(@RequestBody CreateCommentDTO comment) {
+        Comment createdComment = interactionService.saveComment(comment);
+        return ResponseEntity.ok(commentMapper.toDTO(createdComment));
+    }
+
     @PutMapping("/comments/{id}/mute")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CommentDTO> muteComment(@PathVariable Integer id) {
@@ -95,6 +103,7 @@ public class CommunityController {
 
     @PostMapping("/reports")
     public ResponseEntity<ReportDTO> sendReport(@RequestBody Report report) {
+        report.setCreatedAt(Timestamp.from(Instant.now()));
         Report createdReport = interactionService.saveReport(report);
         return ResponseEntity.ok(reportMapper.toDTO(createdReport));
     }

@@ -1,6 +1,8 @@
 package org.example.rdu.controllers;
 
+import org.example.rdu.dtos.CreateNewsDTO;
 import org.example.rdu.dtos.NewsDTO;
+import org.example.rdu.entities.Category;
 import org.example.rdu.entities.News;
 import org.example.rdu.mappers.NewsMapper;
 import org.example.rdu.services.ContentService;
@@ -45,9 +47,23 @@ class NewsController {
 
     @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
     @PostMapping
-    public ResponseEntity<NewsDTO> createNews(@RequestBody News news) {
+    public ResponseEntity<NewsDTO> createNews(@RequestBody CreateNewsDTO news) {
         News createdNews = contentService.saveNews(news);
         return ResponseEntity.status(201).body(newsMapper.toDTO(createdNews));
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+    @PutMapping("/{id}/changeCategory")
+    public ResponseEntity<NewsDTO> changeNewsCategory(@PathVariable Integer id, @RequestBody Integer categoryId) {
+        News newsUpdate = contentService.findNewsById(id);
+        if(newsUpdate == null){return new ResponseEntity<>(HttpStatus.NOT_FOUND);}
+
+        Category newCategory = contentService.findCategoryById(categoryId);
+        newsUpdate.setCategory(newCategory);
+
+
+        News updatedNews = contentService.updateNews(newsUpdate);
+        return new ResponseEntity<>(newsMapper.toDTO(updatedNews), HttpStatus.OK);
     }
 
     @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
@@ -63,7 +79,8 @@ class NewsController {
         if(news.getSrc() != null){newsUpdate.setSrc(news.getSrc());}
         if(news.getLocation() != null){newsUpdate.setLocation(news.getLocation());}
 
-        News updatedNews = contentService.saveNews(newsUpdate);
+
+        News updatedNews = contentService.updateNews(newsUpdate);
         return new ResponseEntity<>(newsMapper.toDTO(updatedNews), HttpStatus.OK);
     }
 

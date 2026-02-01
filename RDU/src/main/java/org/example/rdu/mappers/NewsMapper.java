@@ -12,7 +12,7 @@ public class NewsMapper {
             return null;
         }
 
-        // Extract Category ID safely
+
         Integer categoryId = (news.getCategory() != null) ? news.getCategory().getCategoryId() : null;
 
         return new NewsDTO(

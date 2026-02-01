@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/categories")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class CategoryController {
 
@@ -29,6 +29,12 @@ public class CategoryController {
                 .map(categoryMapper::toDTO)
                 .toList();
         return ResponseEntity.ok(categoryDTOs);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryDTO> getCategory(@PathVariable Integer id) {
+        Category category = contentService.findCategoryById(id);
+        return ResponseEntity.ok(categoryMapper.toDTO(category));
     }
 
 }

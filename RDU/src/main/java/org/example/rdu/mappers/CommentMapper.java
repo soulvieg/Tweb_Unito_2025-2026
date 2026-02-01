@@ -2,8 +2,6 @@ package org.example.rdu.mappers;
 
 import org.example.rdu.dtos.CommentDTO;
 import org.example.rdu.entities.Comment;
-import org.example.rdu.entities.Post;
-import org.example.rdu.entities.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,29 +24,5 @@ public class CommentMapper {
         );
     }
 
-    public Comment toEntity(CommentDTO commentDTO) {
-        if (commentDTO == null) {
-            return null;
-        }
 
-        Comment comment = new Comment();
-        comment.setCommentId(commentDTO.commentId());
-        comment.setText(commentDTO.text());
-        comment.setCreatedAt(commentDTO.timestamp());
-        comment.setMuted(commentDTO.muted());
-
-        if (commentDTO.postId() != null) {
-            Post post = new Post();
-            post.setPostId(commentDTO.postId());
-            comment.setPost(post);
-        }
-
-        if (commentDTO.userId() != null) {
-            User user = new User();
-            user.setUserId(commentDTO.userId());
-            comment.setAuthor(user);
-        }
-
-        return comment;
-    }
 }

@@ -41,10 +41,15 @@ public class LoginFilter implements Filter {
         }
 
         String path = request.getServletPath();
+        System.out.println("path: " + path);
+
+        boolean publicPaths =(path.startsWith("/news") || path.startsWith("/categories") ||  path.startsWith("/users") ||
+                path.startsWith("/category") || path.startsWith("/community")) && request.getMethod().equals("GET");
+
+        boolean authPath = path.startsWith("/session") && request.getMethod().equals("POST");
 
         // ✅ Public endpoints
-        if (path.startsWith("/news") || path.startsWith("/session") ||
-            path.startsWith("/category") || path.startsWith("/community")) {
+        if (publicPaths || authPath) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
