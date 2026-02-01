@@ -2,19 +2,26 @@ import type { CommentType, CreateCommentType } from "../../types";
 import { ax } from "../api";
 import { queriesKeys } from "../queriesKeys";
 
+const path = "/community/posts";
 
 const db = {
 	getAll: async (postId: number) =>
 		await ax
-			.get<CommentType[]>(`/posts/${postId}/comments`)
-			.then((res) => res.data)
+			.get<CommentType[]>(`${path}/${postId}/comments`)
+			.then((res) =>
+				res.data?.sort(
+					(a, b) =>
+						new Date(b.timestamp).getTime() -
+						new Date(a.timestamp).getTime(),
+				),
+			)
 			.catch((e) => {
 				console.error("Error fetching item:", e);
 				throw e;
 			}),
 	create: async (data: CreateCommentType) =>
 		await ax
-			.post<CommentType>(`${"comments"}`, data)
+			.post<CommentType>(`${"/community/comments"}`, data)
 			.then((res) => res.data)
 			.catch((e) => {
 				console.error("Error fetching item:", e);
@@ -28,9 +35,9 @@ const db = {
 				console.error("Error fetching item:", e);
 				throw e;
 			}),
-	mute: async (id: number, muted: boolean) =>
+	mute: async (id: number) =>
 		await ax
-			.patch(`/comments/${id}/mute`, { muted: muted })
+			.put(`/community/comments/${id}/mute`)
 			.then((res) => res.data)
 			.catch((e) => {
 				console.error("Error fetching item:", e);
@@ -52,9 +59,9 @@ export function commentsQueries() {
 			mutationKey: queriesKeys.comments.single(id),
 			mutationFn: async () => db.delete(id),
 		}),
-		mute: (id: number, muted: boolean) => ({
+		mute: (id: number) => ({
 			mutationKey: queriesKeys.comments.all,
-			mutationFn: async () => db.mute(id, muted),
+			mutationFn: async () => db.mute(id),
 		}),
 	};
 }

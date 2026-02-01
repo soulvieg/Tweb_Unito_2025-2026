@@ -2,7 +2,7 @@ import type { LoginType, UserType } from "../../types";
 import { ax } from "../api";
 import { queriesKeys } from "../queriesKeys";
 
-const path = "/auth";
+const path = "/session";
 
 const db = {
 	login: async (login: LoginType) =>

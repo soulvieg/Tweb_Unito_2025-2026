@@ -1,5 +1,5 @@
 import type { CreateNewsType, DatabaseType, NewsType } from "../../types";
-import { database } from "../api";
+import { ax, database } from "../api";
 import { queriesKeys } from "../queriesKeys";
 
 const path = "news";
@@ -12,7 +12,20 @@ export function newsQueries() {
 	return {
 		getAll: () => ({
 			queryKey: queriesKeys.news.all,
-			queryFn: async () => db.getAll(),
+			queryFn: async () =>
+				await ax
+					.get<NewsType[]>(`/news`)
+					.then((res) =>
+						res.data?.sort(
+							(a, b) =>
+								new Date(b.published_at).getTime() -
+								new Date(a.published_at).getTime(),
+						),
+					)
+					.catch((e) => {
+						console.error("Error fetching item:", e);
+						throw e;
+					}),
 		}),
 		getOne: (id: number) => ({
 			queryKey: queriesKeys.news.single(id),
@@ -29,6 +42,17 @@ export function newsQueries() {
 		delete: (id: number) => ({
 			mutationKey: queriesKeys.news.single(id),
 			mutationFn: async () => db.delete(id),
+		}),
+		changeCategory: (id: number) => ({
+			mutationKey: queriesKeys.news.single(id),
+			mutationFn: async (newCategoryId: number) =>
+				await ax
+					.put<NewsType>(`/news/${id}/changeCategory`, newCategoryId)
+					.then((res) => res.data)
+					.catch((e) => {
+						console.error("Error fetching item:", e);
+						throw e;
+					}),
 		}),
 	};
 }

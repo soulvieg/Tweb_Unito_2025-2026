@@ -31,19 +31,15 @@ export function CommentCard({
 	const { toast } = useToast();
 	const { data: author, isPending: isAuthorLoading } = useQuery(
 		{
-			queryKey: ["comment", "author", comment.author],
-			queryFn: queries.users.getOne(comment.author).queryFn,
+			queryKey: ["comment", "author", comment.userId],
+			queryFn: queries.users.getOne(comment.userId).queryFn,
 		},
 		queryClient,
 	);
 
-	// {
-	// 	data: usersList.find((user) => user.userId === comment.userId),
-	// 	isLoading: false,
-	// };
 	const { user } = useAuth();
 	const { mutate: toggleMute, isPending: isTogglingMute } = useMutation({
-		...queries.comments.mute(comment.commentId, !comment.muted),
+		...queries.comments.mute(comment.commentId),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: queriesKeys.comments.all,
@@ -57,7 +53,7 @@ export function CommentCard({
 		},
 	}); //useMutation(queries.comments.mute);
 
-	const myComment = user?.userId === comment.author;
+	const myComment = user?.userId === comment.userId;
 
 	const userBadge = (
 		<div className="shrink-0">
@@ -72,7 +68,7 @@ export function CommentCard({
 	const date = (
 		<div className="flex items-center justify-between gap-2">
 			<span className="text-xs text-muted-foreground">
-				{format(new Date(comment.creationDate), "MMM d, h:mm a")}
+				{format(new Date(comment.timestamp), "MMM d, h:mm a")}
 			</span>
 		</div>
 	);

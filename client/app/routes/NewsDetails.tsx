@@ -1,4 +1,4 @@
-import {  useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import {
@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Link, useParams } from "react-router";
+import CategorySelect from "~/components/CategorySelect";
 import NewsDialog from "~/components/NewsDialog";
 import Button, { MutateButton } from "~/components/ui/Button";
 import Dialog, { useDialogControl } from "~/components/ui/Dialog";
@@ -27,6 +28,14 @@ export default function NewsDetail() {
 	const { user } = useAuth();
 	const { data: article, isPending } = useQuery(
 		queries.news.getOne(id),
+		queryClient,
+	);
+
+	const { data: category, isPending: isCategoryPending } = useQuery(
+		{
+			...queries.categories.getOne(article?.categoryId!),
+			enabled: !!article,
+		},
 		queryClient,
 	);
 
@@ -116,8 +125,19 @@ export default function NewsDetail() {
 						/>
 
 						<div className="flex items-center gap-3 mb-6">
-							<div className="text-sm py-1 px-3 rounded-full  bg-amber-600">
-								{article.src}
+							<div className="text-sm py-1 px-3 rounded-full  bg-amber-600 flex items-center justify-center gap-2">
+								{isCategoryPending ? (
+									<Skeleton className="w-[50px] h-[16px] rounded-xl" />
+								) : is(user).admin ? (
+									<CategorySelect
+										news={article}
+										id="categoryId"
+										label="Category"
+									/>
+								) : (
+									category?.categoryName
+								)}
+								<div>/ {article.src}</div>
 							</div>
 						</div>
 

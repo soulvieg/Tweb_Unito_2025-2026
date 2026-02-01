@@ -15,6 +15,7 @@ import Button, { MutateButton } from "./ui/Button";
 import { useNavigate } from "react-router";
 import { queriesKeys } from "~/lib/Api/queriesKeys";
 import type { AxiosError } from "axios";
+import CategorySelect, { CategoryField } from "./CategorySelect";
 
 type DialogMode = "delete" | "update" | "create";
 
@@ -46,6 +47,7 @@ export default function NewsDialog({
 		img: article?.img ?? "",
 		src: article?.src ?? "",
 		location: article?.location ?? "",
+		categoryId: article?.categoryId ?? 0,
 	});
 
 	const { mutate: update, isPending: isUpdating } = useMutation({
@@ -153,6 +155,7 @@ export default function NewsDialog({
 								{...controls}
 								label="Article Title"
 							/>
+
 							<div className="flex gap-2">
 								<FieldInput
 									id="src"
@@ -164,6 +167,13 @@ export default function NewsDialog({
 									{...controls}
 									label="Location"
 								/>
+								{mode == "create" ? (
+									<CategoryField
+										id="categoryId"
+										label="Category"
+										{...controls}
+									/>
+								) : null}
 							</div>
 							<FieldTextarea
 								id="description"

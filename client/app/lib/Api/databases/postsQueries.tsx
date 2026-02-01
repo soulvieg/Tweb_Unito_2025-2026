@@ -5,10 +5,10 @@ import type {
 	DatabaseType,
 	PostType,
 } from "../../types";
-import { database } from "../api";
+import { ax, database } from "../api";
 import { queriesKeys } from "../queriesKeys";
 
-const path = "posts";
+const path = "community/posts";
 
 const db: DatabaseType<PostType, CreatePostType> = database({
 	path: path,
@@ -18,7 +18,20 @@ export function postsQueries() {
 	return {
 		getAll: () => ({
 			queryKey: queriesKeys.posts.all,
-			queryFn: async () => db.getAll(),
+			queryFn: async () =>
+				await ax
+					.get<PostType[]>(`${path}`)
+					.then((res) =>
+						res.data?.sort(
+							(a, b) =>
+								new Date(b.creationDate).getTime() -
+								new Date(a.creationDate).getTime(),
+						),
+					)
+					.catch((e) => {
+						console.error("Error fetching item:", e);
+						throw e;
+					}),
 		}),
 		getOne: (id: number) => ({
 			queryKey: queriesKeys.posts.single(id),

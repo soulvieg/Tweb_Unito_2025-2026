@@ -24,7 +24,7 @@ export default function AuthPage() {
 						Join the Resistance
 					</CardTitle>
 					<div className="font-mono">
-						Hardcoded accounts: admin/admin123 or rebel/rebel123
+						Hardcoded accounts: admin/admin123 or daniele/daniele123
 					</div>
 				</CardHeader>
 				<CardContent>
@@ -89,6 +89,9 @@ function LoginForm() {
 								username: controls.state.username,
 								password: controls.state.password,
 							});
+						else {
+							console.log(errors);
+						}
 					}}
 					className="font-bold border-2 border-primary"
 				>

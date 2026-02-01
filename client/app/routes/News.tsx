@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import {  Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { NewsCard } from "~/components/NewsCard";
 import Button from "~/components/ui/Button";
 import Skeleton from "~/components/ui/Skeleton";
@@ -30,6 +30,7 @@ export default function News() {
 		filter,
 		onFilterChange,
 	} = useFilterPagination({
+		title: "news",
 		keysToSearch: ["title", "description"],
 		itemsPerPage: 6,
 		items: news,

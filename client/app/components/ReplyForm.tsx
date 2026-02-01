@@ -17,7 +17,7 @@ export function ReplyForm({ postId: postId }: { postId: number }) {
 
 	const controls = useForm<CreateCommentType>({
 		postId: postId,
-		author: user?.userId ?? -1,
+		userId: user?.userId ?? -1,
 		text: "",
 	});
 
@@ -41,9 +41,8 @@ export function ReplyForm({ postId: postId }: { postId: number }) {
 			controls.reset();
 		},
 		onError: (e: AxiosError) => {
-			errorCheck(e, toast,  "You couldn't comment on this post");
+			errorCheck(e, toast, "You couldn't comment on this post");
 		},
-		
 	});
 
 	return (

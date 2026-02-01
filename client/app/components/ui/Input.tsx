@@ -1,5 +1,8 @@
 import React, { type InputHTMLAttributes } from "react";
 import { cn } from "~/lib/utils";
+import { useState, useRef, useEffect } from "react";
+import { Image, X } from "lucide-react";
+import Button from "./Button";
 
 export const common =
 	"rounded-lg border border-gray-400 py-1 px-2 bg-muted font-mono";
@@ -28,9 +31,24 @@ export function Textarea({ label, ...rest }: TextareaProps) {
 	);
 }
 
-import { useState, useRef, useEffect } from "react";
-import { Image, X } from "lucide-react";
-import Button from "./Button";
+export type SelectProps = {
+	label?: string;
+	options?: { value: number; label: string }[];
+} & InputHTMLAttributes<HTMLSelectElement>;
+export function Select({ label, options, ...rest }: SelectProps) {
+	return (
+		<div className="flex flex-col gap-1">
+			{label ? <label htmlFor={rest.id}>{label}</label> : null}
+			<select {...rest} className={cn(common, rest.className ?? "")}>
+				{options?.map((x) => (
+					<option key={rest.name + "_" + x.value} value={x.value}>
+						{x.label}
+					</option>
+				))}
+			</select>
+		</div>
+	);
+}
 
 interface ImagePickerProps {
 	onImageSelect: (file: File) => void;

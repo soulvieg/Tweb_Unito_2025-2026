@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import { ArrowLeft, MessageSquare, User } from "lucide-react";
 import { useState } from "react";
 import { Link, useParams } from "react-router";
+import CategorySelect from "~/components/CategorySelect";
 import { CommentCard } from "~/components/CommentCard";
 import { ReplyForm } from "~/components/ReplyForm";
 import ReportDialog from "~/components/ReportDialog";
@@ -41,8 +42,8 @@ export default function PostsDetail() {
 	);
 
 	const { data: author, isLoading: authorLoading } = useQuery({
-		queryKey: queries.users.getOne(post?.author!).queryKey,
-		queryFn: queries.users.getOne(post?.author!).queryFn,
+		queryKey: queries.users.getOne(post?.userId!).queryKey,
+		queryFn: queries.users.getOne(post?.userId!).queryFn,
 		enabled: !!post,
 	});
 
@@ -77,12 +78,16 @@ export default function PostsDetail() {
 
 	return (
 		<div className="min-h-[60vh]">
-			<ReportDialog
-				mode="create"
-				isOpen={isOpen}
-				onClose={onClose}
-				comment={currentComment}
-			/>
+			{currentComment ? (
+				<ReportDialog
+					isOpen={isOpen}
+					onClose={() => {
+						onClose();
+						setCurrentComment(undefined);
+					}}
+					comment={currentComment}
+				/>
+			) : null}
 			<div className="bg-muted/20 border-b">
 				<div className="container mx-auto px-4 py-8">
 					<Link
@@ -111,17 +116,17 @@ export default function PostsDetail() {
 						</div>
 						<span>•</span>
 						<span>
-							{post.creationDate?.toString()
-							// format(
-							// 	new Date(post.creationDate),
-							// 	"MMMM d, yyyy 'at' h:mm a",
-							// )
-							}
+							{post.creationDate
+								? format(
+										new Date(post.creationDate),
+										"MMMM d, yyyy 'at' h:mm a",
+									)
+								: "-"}
 						</span>
 						<span>•</span>
 						<span className="flex items-center gap-1">
 							<MessageSquare className="w-3 h-3" />{" "}
-							{post.repliesCount} replies
+							{post.count_replies} replies
 						</span>
 					</div>
 					<div className="text-gray-200 border border-gray-200 p-2 mt-2 rounded-lg w-fit">
@@ -146,22 +151,16 @@ export default function PostsDetail() {
 								</p>
 							</div>
 						) : (
-							comments
-								.sort(
-									(a, b) =>
-										new Date(b.creationDate).getTime() -
-										new Date(a.creationDate).getTime(),
-								)
-								.map((comment) => (
-									<CommentCard
-										key={comment.commentId}
-										comment={comment}
-										onReport={(c) => {
-											setCurrentComment(c);
-											onOpen();
-										}}
-									/>
-								))
+							comments.map((comment) => (
+								<CommentCard
+									key={comment.commentId}
+									comment={comment}
+									onReport={(c) => {
+										setCurrentComment(c);
+										onOpen();
+									}}
+								/>
+							))
 						)}
 					</div>
 

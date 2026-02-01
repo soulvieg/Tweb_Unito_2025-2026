@@ -22,18 +22,14 @@ import { useNavigate } from "react-router";
 import { queriesKeys } from "~/lib/Api/queriesKeys";
 import type { AxiosError } from "axios";
 
-type DialogMode = "create";
-
 export default function ReportDialog({
 	isOpen,
 	onClose,
-	mode,
 	comment,
 }: {
 	isOpen: boolean;
 	onClose: () => void;
-	mode: DialogMode;
-	comment: CommentType | undefined;
+	comment: CommentType;
 }) {
 	const { user } = useAuth();
 	const { toast } = useToast();
@@ -42,7 +38,7 @@ export default function ReportDialog({
 	const controls = useForm<CreateReportType>({
 		reason: "",
 		reporterId: user?.userId || -1,
-		commentId: comment?.commentId || -1,
+		commentId: comment.commentId || -1,
 	});
 
 	const { mutate: create, isPending: isCreating } = useMutation({
@@ -63,16 +59,7 @@ export default function ReportDialog({
 		return errors;
 	};
 
-	const action = {
-		create: {
-			isPending: isCreating,
-			mutate: () => {
-				const errors = validate(controls.state);
-				if (Object.keys(errors).length === 0 && user) create();
-			},
-			title: "Create",
-		},
-	};
+	console.log(comment, controls.state);
 
 	if (!user) return null;
 	return (
@@ -94,10 +81,14 @@ export default function ReportDialog({
 			<div className="flex justify-end mt-5">
 				<div className="flex gap-2">
 					<MutateButton
-						isPending={action[mode].isPending}
-						onClick={() => action[mode].mutate()}
+						isPending={isCreating}
+						onClick={() => {
+							const errors = validate(controls.state);
+							if (Object.keys(errors).length === 0 && user)
+								create();
+						}}
 					>
-						{action[mode].title}
+						Report
 					</MutateButton>
 					<Button variant="secondary" onClick={onClose}>
 						Cancel

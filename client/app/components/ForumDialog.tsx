@@ -44,7 +44,7 @@ export default function ForumDialog({
 	const controls = useForm<CreatePostType>({
 		title: "",
 		text: "",
-		author: user?.userId || -1,
+		userId: user?.userId || -1,
 	});
 
 	const validate = (s: CreatePostType) => {

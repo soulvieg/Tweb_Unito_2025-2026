@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react";
 import useDebounce from "./useDebounce";
+import useLocaleState from "./useLocaleState";
 
 export default function useFilterPagination<T>({
 	keysToSearch,
 	itemsPerPage,
 	items,
+	title,
 }: {
+	title: string;
 	keysToSearch: (keyof T)[];
 	itemsPerPage?: number;
 	items: T[] | undefined;
 }) {
-	const [page, setPage] = useState(0);
+	const [page, setPage] = useLocaleState({
+		defaultValue: 0,
+		key: title + "_page",
+	});
 	const [searchTerm, setSearchTerm] = useState("");
 
 	const filtered = items?.filter((article) => {

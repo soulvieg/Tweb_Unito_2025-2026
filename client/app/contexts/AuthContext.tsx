@@ -1,10 +1,4 @@
-import React, {
-	createContext,
-
-	useContext,
-	type JSX,
-
-} from "react";
+import React, { createContext, useContext, type JSX } from "react";
 import type { RoleType, LoginType, UserType } from "../lib/types";
 import { useMutation } from "@tanstack/react-query";
 import { queries } from "~/lib/Api/api";
@@ -52,16 +46,15 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
 	const { mutate: login, isPending } = useMutation({
 		...queries.auth.login,
 		onSuccess: (data) => {
-			const user = (data as any).user;
-			if (user) {
-				console.log(user);
+			if (data) {
+				console.log(data);
 				setUser({
-					userId: user.userId,
-					username: user.username,
-					role: user.role,
+					userId: data.userId,
+					username: data.username,
+					role: data.role,
 				});
 				toast.success({
-					message: "Welcome " + user.username,
+					message: "Welcome " + data.username,
 				});
 			}
 		},

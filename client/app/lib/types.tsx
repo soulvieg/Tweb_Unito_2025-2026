@@ -26,7 +26,13 @@ export type NewsType = {
 
 export type CreateNewsType = Pick<
 	NewsType,
-	"title" | "content" | "description" | "img" | "src" | "location"
+	| "title"
+	| "content"
+	| "description"
+	| "img"
+	| "src"
+	| "location"
+	| "categoryId"
 >;
 
 export type RoleType = "admin" | "user";
@@ -52,10 +58,10 @@ export type PostType = {
 	title: string;
 	text: string;
 	creationDate: Date;
-	author: number;
-	repliesCount: number;
+	userId: number;
+	count_replies: number;
 };
-export type CreatePostType = Pick<PostType, "author" | "title" | "text">;
+export type CreatePostType = Pick<PostType, "userId" | "title" | "text">;
 
 export type ReportType = {
 	reportId: number;
@@ -72,10 +78,10 @@ export type CreateReportType = Pick<
 export type CommentType = {
 	commentId: number;
 	postId: number;
-	author: number;
+	userId: number;
 	text: string;
-	creationDate: Date;
+	timestamp: Date;
 	muted: boolean;
 };
 
-export type CreateCommentType = Pick<CommentType, "postId" | "author" | "text">;
+export type CreateCommentType = Pick<CommentType, "postId" | "userId" | "text">;

@@ -140,8 +140,8 @@ export const postsList: PostType[] = [
 		title: "Situazione critica al reparto pediatrico",
 		text: "Le scorte di antibiotici e latte in polvere sono quasi esaurite. I generatori di emergenza stanno funzionando a intermittenza a causa della carenza di carburante.",
 		creationDate: new Date("2026-01-14T08:30:00"),
-		author: 2,
-		repliesCount: 0,
+		userId: 2,
+		count_replies: 0,
 	},
 	{
 		postId: 102,
@@ -149,8 +149,8 @@ export const postsList: PostType[] = [
 		title: "Aggiornamento distribuzione aiuti alimentari - Zona Sud",
 		text: "Tre camion UNRWA sono arrivati oggi a Rafah. La distribuzione dei pacchi alimentari inizierà domani alle 06:00 presso il centro di smistamento.",
 		creationDate: new Date("2026-01-14T10:15:00"),
-		author: 1,
-		repliesCount: 2,
+		userId: 1,
+		count_replies: 2,
 	},
 	{
 		postId: 103,
@@ -158,8 +158,8 @@ export const postsList: PostType[] = [
 		title: "Danni strutturali dopo la tempesta di stanotte",
 		text: "Le forti piogge hanno allagato diverse tendopoli a Khan Younis. Centinaia di famiglie necessitano di coperte asciutte e teloni impermeabili immediatamente.",
 		creationDate: new Date("2026-01-14T12:00:00"),
-		author: 3,
-		repliesCount: 1,
+		userId: 3,
+		count_replies: 1,
 	},
 ];
 
@@ -169,25 +169,25 @@ export const commentsList: CommentType[] = [
 	{
 		commentId: 501,
 		postId: 103, // Commento sul post medico
-		author: 1, // Scritto dall'Admin
+		userId: 1, // Scritto dall'Admin
 		text: "Stiamo coordinando con l'OMS per una consegna d'emergenza entro stasera. Tenete duro.",
-		creationDate: new Date("2025-01-15T12:00:00"),
+		timestamo: new Date("2025-01-15T12:00:00"),
 		muted: false,
 	},
 	{
 		commentId: 502,
 		postId: 102, // Commento sul post cibo
-		author: 3, // Scritto dal Giornalista
+		userId: 3, // Scritto dal Giornalista
 		text: "Potete confermare se ci sarà anche acqua potabile? La gente lo sta chiedendo.",
-		creationDate: new Date("2026-01-13T12:00:00"),
+		timestamo: new Date("2026-01-13T12:00:00"),
 		muted: false,
 	},
 	{
 		commentId: 503,
 		postId: 102, // Commento sul post tempesta
-		author: 2, // Scritto dalla Dottoressa
+		userId: 2, // Scritto dalla Dottoressa
 		text: "Stiamo vedendo i primi casi di ipotermia arrivare in ospedale da quella zona. Serve agire subito.",
-		creationDate: new Date("2024-01-17T12:00:00"),
+		timestamo: new Date("2024-01-17T12:00:00"),
 		muted: false,
 	},
 ];

@@ -2,7 +2,7 @@ import type { JSX, PropsWithChildren } from "react";
 import type { UserType } from "./types";
 import type { ErrorFormType } from "~/hooks/useForm";
 import type { AxiosError } from "axios";
-import {  type AddToast } from "~/contexts/ToastContext";
+import { type AddToast } from "~/contexts/ToastContext";
 
 export function cn(...classes: string[]) {
 	return classes.join(" ");
@@ -38,6 +38,7 @@ export function errorCheck(
 	toast: AddToast,
 	message: string | JSX.Element,
 ) {
+	console.log(error);
 	if (error?.request["status"] !== 0) {
 		console.error(error);
 		toast.error({

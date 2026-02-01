@@ -5,6 +5,7 @@ import { reportsQueries } from "./databases/reportsDatabase";
 import { postsQueries } from "./databases/postsQueries";
 import { commentsQueries } from "./databases/commentsDatabase";
 import { authQueries } from "./databases/authDatabase";
+import { categoriesQueries } from "./databases/categoriesDatabase";
 
 export const ax = axios.create({
 	baseURL: "http://localhost:8080",
@@ -67,4 +68,5 @@ export const queries = {
 	users: usersQueries(),
 	auth: authQueries(),
 	reports: reportsQueries(),
+	categories: categoriesQueries(),
 };

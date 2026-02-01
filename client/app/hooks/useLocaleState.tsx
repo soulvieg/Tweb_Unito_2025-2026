@@ -10,7 +10,7 @@ export default function useLocaleState<T>({
 	const [val, setVal] = useState<T>(
 		typeof window === "undefined"
 			? defaultValue
-			: (JSON.parse(localStorage.getItem(key) || "null") ?? defaultValue),
+			: (JSON.parse(localStorage.getItem(key) ?? "null") ?? defaultValue),
 	);
 
 	const setLocaleVal = (newVal: T) => {

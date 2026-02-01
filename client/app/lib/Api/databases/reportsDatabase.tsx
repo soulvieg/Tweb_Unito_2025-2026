@@ -14,7 +14,7 @@ import { queriesKeys } from "../queriesKeys";
 const db = {
 	create: async (data: CreateReportType) =>
 		await ax
-			.post<ReportType>(`${"reports"}`, data)
+			.post<ReportType>(`${"/community/reports"}`, data)
 			.then((res) => res.data)
 			.catch((e) => {
 				console.error("Error fetching item:", e);
@@ -25,8 +25,8 @@ const db = {
 export function reportsQueries() {
 	return {
 		create: (data: CreateReportType) => ({
-			queryKey: queriesKeys.reports.all,
-			queryFn: async () => db.create(data),
+			mutationKey: queriesKeys.reports.all,
+			mutationFn: async () => db.create(data),
 		}),
 	};
 }

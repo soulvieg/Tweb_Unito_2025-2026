@@ -29,13 +29,10 @@ export default function Forum() {
 
 	const { paginatedItems, next, prev, canPrev, canNext } =
 		useFilterPagination({
+			title: "forum",
 			keysToSearch: ["title"],
 			itemsPerPage: 4,
-			items: posts?.sort(
-				(a, b) =>
-					new Date(b.creationDate).getTime() -
-					new Date(a.creationDate).getTime(),
-			),
+			items: posts,
 		});
 
 	return (
@@ -159,8 +156,9 @@ function SinglePost({
 }) {
 	const { data: author, isPending: isAuthorLoading } = useQuery(
 		{
-			queryKey: ["post", "author", post.author],
-			queryFn: queries.users.getOne(post.author).queryFn,
+			queryKey: ["post", "author", post.userId],
+			queryFn: queries.users.getOne(post.userId).queryFn,
+			enabled: !!post.userId,
 		},
 		queryClient,
 	);
@@ -218,7 +216,7 @@ function SinglePost({
 							) : null}
 							<div className="flex flex-col items-center justify-center bg-muted/50 rounded-lg p-3 min-w-[4rem]">
 								<span className="text-xl font-bold text-primary">
-									{post.repliesCount}
+									{post.count_replies}
 								</span>
 								<span className="text-[10px] uppercase font-medium text-muted-foreground">
 									Replies

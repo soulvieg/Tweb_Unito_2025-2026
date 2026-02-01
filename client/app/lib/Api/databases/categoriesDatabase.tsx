@@ -33,14 +33,14 @@ const db = {
 			}),
 };
 
-export function reportsQueries() {
+export function categoriesQueries() {
 	return {
 		getAll: () => ({
 			queryKey: queriesKeys.categories.all,
 			queryFn: async () => db.getAll(),
 		}),
 		getOne: (categoryId: number) => ({
-			queryKey: queriesKeys.categories.all,
+			queryKey: queriesKeys.categories.single(categoryId),
 			queryFn: async () => db.getOne(categoryId),
 		}),
 	};
