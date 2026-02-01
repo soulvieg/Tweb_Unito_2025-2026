@@ -1,7 +1,10 @@
 package org.example.rdu.mappers;
 
+import org.example.rdu.dtos.CreateReportDTO;
 import org.example.rdu.dtos.ReportDTO;
+import org.example.rdu.entities.Comment;
 import org.example.rdu.entities.Report;
+import org.example.rdu.entities.User;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -12,23 +15,26 @@ public class ReportMapper {
         if (report == null) {
             return null;
         }
+
+        Integer commentId = (report.getComment() != null) ? report.getComment().getCommentId() : null;
+        Integer reporterId = (report.getReporter() != null) ? report.getReporter().getUserId() : null;
+
         return new ReportDTO(
                 report.getReportId(),
                 report.getReason(),
-                report.getCommentId(),
-                report.getReporterId()
+                commentId,
+                reporterId
         );
     }
 
-    public Report toEntity(ReportDTO reportDTO) {
+    public Report toEntity(CreateReportDTO reportDTO, Comment comment, User reporter) {
         if (reportDTO == null) {
             return null;
         }
         Report report = new Report();
-        report.setReportId(reportDTO.reportId());
+        report.setComment(comment);
+        report.setReporter(reporter);
         report.setReason(reportDTO.reason());
-        report.setCommentId(reportDTO.commentId());
-        report.setReporterId(reportDTO.reporterId());
         report.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         return report;
 }

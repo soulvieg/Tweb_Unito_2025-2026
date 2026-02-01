@@ -102,9 +102,8 @@ public class CommunityController {
 
 
     @PostMapping("/reports")
-    public ResponseEntity<ReportDTO> sendReport(@RequestBody Report report) {
-        report.setCreatedAt(Timestamp.from(Instant.now()));
-        Report createdReport = interactionService.saveReport(report);
+    public ResponseEntity<ReportDTO> sendReport(@RequestBody CreateReportDTO createReportDTO) {
+        Report createdReport = interactionService.saveReport(createReportDTO);
         return ResponseEntity.ok(reportMapper.toDTO(createdReport));
     }
 

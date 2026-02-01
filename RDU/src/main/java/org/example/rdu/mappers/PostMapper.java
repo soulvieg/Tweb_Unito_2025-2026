@@ -35,10 +35,9 @@ public class PostMapper {
         post.setCreationDate(postDTO.creationDate());
         post.setCount_replies(postDTO.count_replies());
 
-        // Map User ID to User Stub
+
         if (postDTO.userId() != null) {
             User user = new User();
-            // Assuming User entity has setUserId or similar
             user.setUserId(postDTO.userId());
             post.setAuthor(user);
         }

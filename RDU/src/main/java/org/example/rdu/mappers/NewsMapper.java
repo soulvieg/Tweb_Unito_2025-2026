@@ -43,7 +43,7 @@ public class NewsMapper {
         news.setLocation(newsDTO.location());
         news.setPublished_at(newsDTO.published_at());
 
-        // Map Category ID to a Category "Stub"
+
         if (newsDTO.categoryId() != null) {
             Category category = new Category();
             category.setCategoryId(newsDTO.categoryId());

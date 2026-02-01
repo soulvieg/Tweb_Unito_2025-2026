@@ -2,6 +2,7 @@ package org.example.rdu.services;
 
 import org.example.rdu.dtos.CreateCommentDTO;
 import org.example.rdu.dtos.CreatePostDTO;
+import org.example.rdu.dtos.CreateReportDTO;
 import org.example.rdu.entities.Comment;
 import org.example.rdu.entities.Post;
 import org.example.rdu.entities.Report;
@@ -109,8 +110,19 @@ public class InteractionService {
     }
 
     @Transactional
-    public Report saveReport(Report report) {
+    public Report saveReport(CreateReportDTO createReportDTO) {
+        Comment comment = commentRepository.findById(createReportDTO.commentId()).orElse(null);
+        User reporter = userService.findUser(createReportDTO.reporterId());
 
+        if (comment == null || reporter == null) {
+            throw new RuntimeException("Comment or User not found");
+        }
+
+        Report report = new Report();
+        report.setComment(comment);
+        report.setReporter(reporter);
+        report.setReason(createReportDTO.reason());
+        report.setCreatedAt(Timestamp.from(Instant.now()));
         return reportRepository.save(report);
     }
 

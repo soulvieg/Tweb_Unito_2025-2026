@@ -21,8 +21,15 @@ public class Report {
     private Integer reportId;
 
     private String reason;
+
     private Timestamp createdAt;
-    private Integer commentId;
-    private Integer reporterId;
+
+    @ManyToOne
+    @JoinColumn(name="commentId", nullable=false)
+    private Comment comment;
+
+    @ManyToOne
+    @JoinColumn(name="reporterId", nullable=false)
+    private User reporter;
 
 }

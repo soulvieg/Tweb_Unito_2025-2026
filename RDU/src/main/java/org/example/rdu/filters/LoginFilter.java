@@ -48,13 +48,13 @@ public class LoginFilter implements Filter {
 
         boolean authPath = path.startsWith("/session") && request.getMethod().equals("POST");
 
-        // ✅ Public endpoints
+
         if (publicPaths || authPath) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
 
-        // ✅ Session authentication
+
         HttpSession session = request.getSession(false);
         boolean isLoggedIn =
                 session != null && session.getAttribute("username") != null;
@@ -63,7 +63,7 @@ public class LoginFilter implements Filter {
             String username = (String) session.getAttribute("username");
             UserType userType = (UserType) session.getAttribute("role");
 
-            // Create Spring Security authentication
+
             Collection<GrantedAuthority> authorities = userType == UserType.admin
                     ? Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"))
                     : Collections.emptyList();

@@ -51,7 +51,7 @@ class DataSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        // --- FIX 1: Check if data already exists to prevent crash ---
+
         if (userRepository.count() > 0) {
             System.out.println("Database already seeded. Skipping DataSeeder.");
             return;
@@ -91,7 +91,7 @@ class DataSeeder implements CommandLineRunner {
         user5.setUserType(UserType.user);
         users.add(user5);
 
-        // Save users first so they have IDs for relationships
+
         userRepository.saveAll(users);
 
         System.out.println("Starting seeding for the Post Table");
@@ -210,7 +210,7 @@ class DataSeeder implements CommandLineRunner {
 
         System.out.println("Starting seeding for the Category");
 
-        // --- FIX 2: Corrected Variable Names (You were using ca1 for everything) ---
+
         List<Category> categories = new ArrayList<>();
 
         Category ca1 = new Category();
@@ -218,26 +218,26 @@ class DataSeeder implements CommandLineRunner {
         categories.add(ca1);
 
         Category ca2 = new Category();
-        ca2.setCategoryName("sadas"); // Fixed: using ca2
+        ca2.setCategoryName("sadas");
         categories.add(ca2);
 
         Category ca3 = new Category();
-        ca3.setCategoryName("Palla"); // Fixed: using ca3
+        ca3.setCategoryName("Palla");
         categories.add(ca3);
 
         Category ca4 = new Category();
-        ca4.setCategoryName("Canestro"); // Fixed: using ca4
+        ca4.setCategoryName("Canestro");
         categories.add(ca4);
 
         Category ca5 = new Category();
-        ca5.setCategoryName("Lollo"); // Fixed: using ca5
+        ca5.setCategoryName("Lollo");
         categories.add(ca5);
 
         categoryRepository.saveAll(categories);
 
         System.out.println("Starting seeding for the News");
 
-        // --- FIX 3: Cleaned up formatting ---
+
         List<News> news = new ArrayList<>();
 
         News n1 = new News();
