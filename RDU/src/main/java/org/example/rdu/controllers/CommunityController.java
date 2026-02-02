@@ -109,6 +109,7 @@ public class CommunityController {
 
 
     @GetMapping("/reports")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ReportDTO>> getAllReports() {
         List<Report> reports = interactionService.findAllReports();
         List<ReportDTO> reportDTOs = reports.stream()

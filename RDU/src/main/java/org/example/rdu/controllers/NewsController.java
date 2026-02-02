@@ -47,6 +47,7 @@ class NewsController {
 
     @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<NewsDTO> createNews(@RequestBody CreateNewsDTO news) {
         News createdNews = contentService.saveNews(news);
         return ResponseEntity.status(201).body(newsMapper.toDTO(createdNews));
@@ -54,6 +55,7 @@ class NewsController {
 
     @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
     @PutMapping("/{id}/changeCategory")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<NewsDTO> changeNewsCategory(@PathVariable Integer id, @RequestBody Integer categoryId) {
         News newsUpdate = contentService.findNewsById(id);
         if(newsUpdate == null){return new ResponseEntity<>(HttpStatus.NOT_FOUND);}
@@ -68,6 +70,7 @@ class NewsController {
 
     @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<NewsDTO> updateNews(@PathVariable Integer id, @RequestBody News news){
         News newsUpdate = contentService.findNewsById(id);
         if(newsUpdate == null){return new ResponseEntity<>(HttpStatus.NOT_FOUND);}
